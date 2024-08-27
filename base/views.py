@@ -2,6 +2,8 @@ import requests
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 
+def test(request):
+    return render(request, 'base.html')
 def login(request):
     if request.method == 'POST':
         email = request.POST.get('email')
@@ -23,4 +25,4 @@ def login(request):
     return render(request, 'login.html')
 
 def home(request):
-    return render(request, 'base/home.html')
+    return render(request, 'home.html')

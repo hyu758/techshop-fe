@@ -1,0 +1,31 @@
+<header class="bg-white">
+    <nav class="flex justify-between items-center w-[92%] mx-auto border-b border-gray-200">
+        <div>
+            <img class="w-16 cursor-pointer" src="https://i.imgflip.com/4eviv4.png"
+                alt="...">
+        </div>
+        <div class="nav-links duration-500 md:static absolute bg-white md:min-h-fit min-h-[60vh] left-0 top-[-100%] md:w-auto  w-full flex md:items-center px-5">
+            <ul class="flex md:flex-row flex-col md:items-center md:gap-[4vw] gap-8">
+                <li>
+                    <a class="hover:text-gray-500" href="#">Products</a>
+                </li>
+                <li>
+                    <a class="hover:text-gray-500" href="#">Contact</a>
+                </li>
+
+            </ul>
+        </div>
+        <div class="flex items-center gap-6">
+            <button class="bg-slate-200 text-dark px-5 py-2 rounded-full hover:bg-slate-400">Sign in</button>
+            <button class="bg-indigo-400 text-white px-5 py-2 rounded-full hover:bg-indigo-600">Sign up</button>
+            <ion-icon onclick="onToggleMenu(this)" name="menu" class="text-3xl cursor-pointer md:hidden"></ion-icon>
+        </div>
+    </nav>
+</header>
+<script>
+    const navLinks = document.querySelector('.nav-links')
+    function onToggleMenu(e) {
+        e.name = e.name === 'menu' ? 'close' : 'menu'
+        navLinks.classList.toggle('top-[9%]')
+    }
+</script>
