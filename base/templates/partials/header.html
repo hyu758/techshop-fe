@@ -1,37 +1,64 @@
-<header class="bg-white">
-    <nav class="flex justify-between items-center w-[92%] mx-auto border-b border-gray-200">
-        <div>
-            <img class="w-16 cursor-pointer" src="https://i.imgflip.com/4eviv4.png"
-                alt="...">
-        </div>
-        <div class="nav-links duration-500 md:static absolute bg-white md:min-h-fit min-h-[60vh] left-0 top-[-100%] md:w-auto  w-full flex md:items-center px-5">
-            <ul class="flex md:flex-row flex-col md:items-center md:gap-[4vw] gap-8">
+<header id="header">
+    <div id="header-wrap">
+      <nav class="secondary-nav border-bottom">
+        <div class="container">
+          <div class="row d-flex align-items-center">
+            <div class="col-md-4 header-contact">
+              alo
+            </div>
+            <div class="col-md-4 shipping-purchase text-center">
+            </div>
+            <div class="col-md-4 col-sm-12 user-items">
+              <ul class="d-flex justify-content-end list-unstyled">
                 <li>
-                    <a class="hover:text-gray-500" href="#">Products</a>
+                  <a href="/login">
+                    <i class="icon icon-user"></i>
+                  </a>
                 </li>
                 <li>
-                    <a class="hover:text-gray-500" href="#">Contact</a>
+                  <a href="/cart">
+                    <i class="icon icon-shopping-cart"></i>
+                  </a>
                 </li>
-
-            </ul>
+                <li class="user-items search-item pe-3">
+                  <a href="#" class="search-button">
+                    <i class="icon icon-search"></i>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
         </div>
-        <div class="flex items-center gap-6">
-            <button class="bg-slate-200 text-dark px-5 py-2 rounded-full hover:bg-slate-400">
-                <a href="/login">Sign in</a>
+      </nav>
+      <nav class="primary-nav padding-small">
+        <div class="container">
+          <div class="row d-flex align-items-center">
+            <div class="col-lg-2 col-md-2">
+              <div class="main-logo">
+                <a href="">
+                  <img src="images/main-logo.png" alt="logo">
+                </a>
+              </div>
+            </div>
+            <div class="col-lg-10 col-md-10">
+              <div class="navbar">
 
-            </button>
-            <button class="bg-indigo-400 text-white px-5 py-2 rounded-full hover:bg-indigo-600">
-                <a href="/register">Sign up</a>
+                <div id="main-nav" class="stellarnav d-flex justify-content-end right">
+                  <ul class="menu-list">
 
-            </button>
-            <ion-icon onclick="onToggleMenu(this)" name="menu" class="text-3xl cursor-pointer md:hidden"></ion-icon>
+                    <li class="menu-item">
+                      <a href="" class="item-anchor active d-flex align-item-center" data-effect="Home">Home</a>
+                    </li>
+                    <li><a href="about.html" class="item-anchor" data-effect="About">About</a></li>
+                    <li><a href="contact.html" class="item-anchor" data-effect="Contact">Contact</a></li>
+
+                  </ul>
+                </div>
+
+              </div>
+            </div>
+          </div>
         </div>
-    </nav>
-</header>
-<script>
-    const navLinks = document.querySelector('.nav-links')
-    function onToggleMenu(e) {
-        e.name = e.name === 'menu' ? 'close' : 'menu'
-        navLinks.classList.toggle('top-[9%]')
-    }
-</script>
+      </nav>
+    </div>
+  </header>

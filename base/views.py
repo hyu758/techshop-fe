@@ -3,9 +3,11 @@ import json
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.contrib import messages
+import random
 
-def test(request):
-    return render(request, 'base.html')
+def format_currency(value):
+    return "{:,.0f}".format(float(value))
+
 def login(request):
     if request.method == 'POST':
         email = request.POST.get('email')
@@ -24,7 +26,7 @@ def login(request):
             # Xử lý khi có lỗi
             return JsonResponse({'error': 'Invalid credentials'}, status=401)
 
-    return render(request, 'login.html')
+    return render(request, 'components/login.html')
 
 def register(request):
     if request.method == 'POST':
@@ -59,7 +61,19 @@ def register(request):
         except requests.exceptions.RequestException:
             return JsonResponse({'error': 'Không thể kết nối tới API đăng ký.'}, status=500)
         
-    return render(request, 'register.html')
+    return render(request, 'components/register.html')
 
 def home(request):
-    return render(request, 'home.html')
+    url = "https://techshop-backend-c7hy.onrender.com/api/getAllProducts"
+    response = requests.get(url)
+    
+    if response.status_code == 200:
+        products = response.json()
+        products = random.sample(products, 4) if len(products) > 4 else products
+        for product in products:
+            product['price'] = format_currency(product['price'])
+    else:
+        products = []
+
+    return render(request, 'home.html', {'products': products})
+
