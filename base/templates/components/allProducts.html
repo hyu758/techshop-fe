@@ -1,0 +1,278 @@
+{% load static %}
+
+  <div class="shopify-grid padding-large">
+    <div class="container">
+      <div class="row">
+        <section id="selling-products" class="col-md-9 product-store">
+          <div class="container">
+            <ul class="tabs list-unstyled">
+              <li data-tab-target="#all" cate-id="0" class="active tab">All</li>
+              <li data-tab-target="#Laptop" cate-id="1" class="tab">Laptop</li>
+              <li data-tab-target="#PC" cate-id="5" class="tab">PC</li>
+              <li data-tab-target="#Keyboard" cate-id="3" class="tab">Keyboard</li>
+              <li data-tab-target="#Mouse" cate-id="4" class="tab">Mouse</li>
+              <li data-tab-target="#Monitor" cate-id="2" class="tab">Monitor</li>
+            </ul>
+            <div class="tab-content">
+              <div id="all" data-tab-content class="active">
+                <div class="spinner-wrapper w-100 d-flex">
+                  <div class="spinner justify-content-center align-items-center"></div>
+                </div>
+                <div class="row d-flex flex-wrap" id="product-list">
+
+                </div>
+              </div>
+            </div>
+            <nav class="navigation paging-navigation text-center padding-medium" role="navigation">
+              <div class="pagination loop-pagination d-flex justify-content-center">
+                <a href="#" class="pagination-arrow d-flex align-items-center">
+                  <i class="icon icon-arrow-left"></i>
+                </a>
+                <span aria-current="page" class="page-numbers current">1</span>
+                <a class="page-numbers" href="#">2</a>
+                <a class="page-numbers" href="#">3</a>
+                <a href="#" class="pagination-arrow d-flex align-items-center">
+                  <i class="icon icon-arrow-right"></i>
+                </a>
+              </div>
+            </nav>
+          </div>
+            <!-- Pagination, sidebar, etc. here -->
+        </section>
+        <aside class="col-md-3">
+          <div class="sidebar">
+            <div class="widgets widget-menu">
+              <div class="widget-search-bar">
+                <form role="search" method="get" class="d-flex">
+                  <input class="search-field" placeholder="Search" type="text">
+                  <button class="btn btn-dark"><i class="icon icon-search"></i></button>
+                </form>
+              </div> 
+            </div>
+            <div class="widgets widget-product-tags">
+              <h5 class="widget-title">Tags</h5>
+              <ul class="product-tags sidebar-list list-unstyled">
+                <li class="tags-item">
+                  <a href="">White</a>
+                </li>
+                <li class="tags-item">
+                  <a href="">Cheap</a>
+                </li>
+                <li class="tags-item">
+                  <a href="">Branded</a>
+                </li>
+                <li class="tags-item">
+                  <a href="">Modern</a>
+                </li>
+                <li class="tags-item">
+                  <a href="">Simple</a>
+                </li>
+              </ul>
+            </div>
+            <div class="widgets widget-product-brands">
+              <h5 class="widget-title">Brands</h5>
+              <ul class="product-tags sidebar-list list-unstyled">
+                <li class="tags-item">
+                  <a href="">Nike</a>
+                </li>
+                <li class="tags-item">
+                  <a href="">Adidas</a>
+                </li>
+                <li class="tags-item">
+                  <a href="">Puma</a>
+                </li>
+                <li class="tags-item">
+                  <a href="">Spike</a>
+                </li>
+              </ul>
+            </div>
+            <div class="widgets widget-price-filter">
+              <h5 class="widget-title">Filter By Price</h5>
+              <ul class="product-tags sidebar-list list-unstyled">
+                <li class="tags-item">
+                  <a href="">Less than $10</a>
+                </li>
+                <li class="tags-item">
+                  <a href="">$10- $20</a>
+                </li>
+                <li class="tags-item">
+                  <a href="">$20- $30</a>
+                </li>
+                <li class="tags-item">
+                  <a href="">$30- $40</a>
+                </li>
+                <li class="tags-item">
+                  <a href="">$40- $50</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>      
+  </div>
+
+  <script>
+    function getRating(rating) {
+      const fullStar = "{% static '/image/full-star.png' %}";
+      const halfStar = "{% static '/image/half-star.png' %}";
+      const emptyStar = "{% static '/image/empty-star.png' %}";
+    
+      let fullStars = Math.floor(rating);
+      let halfStars = (rating % 1) >= 0.5 ? 1 : 0;
+      let emptyStars = 5 - fullStars - halfStars;
+    
+      let starsHTML = '';
+    
+      for (let i = 0; i < fullStars; i++) {
+        starsHTML += `<img src="${fullStar}" alt="Full Star">`;
+      }
+    
+      if (halfStars > 0) {
+        starsHTML += `<img src="${halfStar}" alt="Half Star">`;
+      }
+    
+      for (let i = 0; i < emptyStars; i++) {
+        starsHTML += `<img src="${emptyStar}" alt="Empty Star">`;
+      }
+    
+      return starsHTML;
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+      const preloader = document.querySelector('.spinner-wrapper');
+      const pagination = document.querySelector('.pagination'); // Phần pagination
+      var productList = document.querySelector('#product-list');
+      let currentPage = 1;
+      const pageSize = 9; // Số sản phẩm trên mỗi trang
+  
+      function fetchProducts(categoryId, page = 1) {
+        // Hiển thị spinner trước khi bắt đầu fetch sản phẩm
+        preloader.classList.remove('d-none');
+        preloader.classList.add('d-block');   
+  
+        // Tạo URL với tham số lọc và phân trang
+        const url = categoryId === '0'
+          ? `/api/products/?page=${page}&page_size=${pageSize}`
+          : `/api/products/?category_id=${categoryId}&page=${page}&page_size=${pageSize}`;
+  
+        fetch(url)
+          .then(response => response.json())
+          .then(data => {
+            const products = data.products; // Giả sử API trả về mảng sản phẩm
+            const totalPages = data.total_pages; // Giả sử API trả về tổng số trang
+  
+            // Xây dựng HTML cho sản phẩm
+            let productHTML = '';
+            products.forEach(product => {
+              let rating = getRating(product.rating);
+              productHTML += `
+                <div class="product-item col-lg-4 col-md-6 col-sm-6" style = "margin-bottom: 80px !important" data-category-id="${product.category_id}">
+                  <div class="image-holder">
+                    <img src="${product.image_url}" alt="${product.name}" class="product-image">
+                  </div>
+                  <div class="cart-concern border-1">
+                    <div class="cart-button d-flex justify-content-between align-items-center">
+                      <button type="button" class="btn-wrap cart-link d-flex align-items-center">add to cart <i class="icon icon-arrow-io"></i></button>
+                      <button type="button" class="view-btn tooltip d-flex">
+                        <i class="icon icon-screen-full"></i>
+                        <span class="tooltip-text">Quick view</span>
+                      </button>
+                      <button type="button" class="wishlist-btn">
+                        <i class="icon icon-heart"></i>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="product-detail">
+                    <h3 class="product-title">
+                      <a href="single-product.html">${product.name}</a>
+                    </h3>
+                    <div class = "d-flex align-items-center gap-2 mb-2">
+                      <div class = "d-flex rating">
+                        ${rating}
+                      </div>
+                      <div class="fs-6 text-secondary px-2 border-start">Đã bán: ${product.sold_quantity}</div>
+                    </div>
+                    <div class="item-price text-danger fs-4 fw-semibold">${product.price}₫</div>
+
+                  </div>
+                </div>
+              `;
+            });
+  
+            // Cập nhật nội dung danh sách sản phẩm
+            productList.innerHTML = productHTML;
+            preloader.classList.add('d-none');
+            preloader.classList.remove('d-block');
+  
+            // Cập nhật pagination
+            renderPagination(totalPages, categoryId);
+          })
+          .catch(error => {
+            console.error('Error fetching products:', error);
+            preloader.classList.add('d-none');
+            preloader.classList.remove('d-block');
+          });
+      }
+  
+      function renderPagination(totalPages, categoryId) {
+        const paginationContainer = document.querySelector('.pagination.loop-pagination');
+        paginationContainer.innerHTML = '';
+  
+        for (let page = 1; page <= totalPages; page++) {
+          const pageButton = document.createElement('a');
+          pageButton.classList.add('page-numbers');
+          if (page === currentPage) {
+            pageButton.classList.add('current');
+          }
+          pageButton.textContent = page;
+  
+          pageButton.addEventListener('click', function() {
+            currentPage = page;
+            fetchProducts(categoryId, currentPage);
+          });
+  
+          paginationContainer.appendChild(pageButton);
+        }
+  
+        // Thêm các nút 'Previous' và 'Next'
+        if (currentPage > 1) {
+          const prevButton = document.createElement('a');
+          prevButton.classList.add('pagination-arrow', 'd-flex', 'align-items-center');
+          prevButton.innerHTML = '<i class="icon icon-arrow-left"></i>';
+          prevButton.addEventListener('click', function() {
+            currentPage--;
+            fetchProducts(categoryId, currentPage);
+          });
+          paginationContainer.prepend(prevButton);
+        }
+  
+        if (currentPage < totalPages) {
+          const nextButton = document.createElement('a');
+          nextButton.classList.add('pagination-arrow', 'd-flex', 'align-items-center');
+          nextButton.innerHTML = '<i class="icon icon-arrow-right"></i>';
+          nextButton.addEventListener('click', function() {
+            currentPage++;
+            fetchProducts(categoryId, currentPage);
+          });
+          paginationContainer.appendChild(nextButton);
+        }
+      }
+  
+      fetchProducts('0', 1);
+  
+      const tabs = document.querySelectorAll('.tabs .tab');
+      tabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+          const categoryId = this.getAttribute('cate-id');
+          tabs.forEach(t => t.classList.remove('active'));
+          this.classList.add('active');
+  
+          currentPage = 1;
+          fetchProducts(categoryId, currentPage);
+        });
+      });
+    });
+  </script>
+  
+  
+  

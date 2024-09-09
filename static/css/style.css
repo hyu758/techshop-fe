@@ -567,6 +567,12 @@ form {
 }
 
 /* display flex utilities */
+
+.rating img{
+  height: 15px;
+  width: 15px;
+}
+
 .d-flex {
   display: -ms-flexbox !important;
   display: flex !important;
@@ -1973,8 +1979,54 @@ blockquote cite {
   }
 }
 
+.spinner-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: rgba(255, 255, 255, 0.8); /* Background color for overlay effect */
+  z-index: 9999;
+}
+
+.spinner {
+  border: 8px solid #f3f3f3; /* Light grey background */
+  border-top: 8px solid #3498db; /* Blue color */
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.spinner-wrapper p {
+  margin-top: 10px;
+  font-size: 16px;
+  color: #333;
+}
+.spinner-container {
+  height: 100vh; /* Chiều cao của spinner container */
+}
 /*----- Featured Products Section
 --------------------------------------------------------------*/
+
+.cate img {
+  display: block;
+  transition: transform 0.3s ease-in-out; 
+}
+
+.cate:hover img {
+  transform: scale(1.1); 
+}
+
 .product-store .product-item {
     position: relative;
     margin-bottom: 30px;
@@ -2029,6 +2081,13 @@ i.icon.icon-arrow-io {
 .product-item h3.product-title {
     font-size: 1.4em;
     margin: 0;
+}
+.product-detail .product-title {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 2; /* Giới hạn số dòng là 2 */
 }
 .product-item .item-price {
     font-size: 1.8em;
@@ -2211,11 +2270,14 @@ i.icon.icon-arrow-io {
     margin-right: 50px;
     cursor: pointer;
     transition: 0.2s all;
+    border-radius: 3px;
+    padding: 6px 10px;
 }
-.tabs .tab.active,
-.tabs .tab:hover {
-    color: var(--primary-color);
+.tabs .tab.active{
+  background-color: #6995B1;
+  color: white !important;
 }
+.tabs .tab:hover
 
 @media screen and (max-width: 991px) {
   #selling-products .tabs {

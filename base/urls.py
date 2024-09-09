@@ -6,4 +6,6 @@ urlpatterns = [
     path('login/', login, name='login'),
     path('register/', register, name='register'),
     path('', home, name='home'),
+    path('shop/', shop, name='shop'),
+    path('api/products/', api_get_all_products, name='api_get_all_products'),
 ]

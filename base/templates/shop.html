@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %} Shopping page {% endblock %}
+{% block content %}
+    {% include "partials/header.html" %}
+    <!-- main content -->
+    <section class="site-banner jarallax min-height300 padding-large" style="background: url(images/hero-image.jpg) no-repeat; background-position: top;">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-12">
+              <h1 class="page-title">Shop page</h1>
+              <div class="breadcrumbs">
+                <span class="item">
+                  <a href="/">Home/</a>
+                </span>
+                <span class="item">Shop</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    
+    {% include "components/allProducts.html" %}
+    {% include "partials/footer.html" %}
+
+{% endblock %}

@@ -1,43 +1,57 @@
+{% load static %}
 <section id="billboard" class="overflow-hidden">
-  <button class="button-prev">
-    <i class="icon icon-chevron-left"></i>
-  </button>
-  <button class="button-next">
-    <i class="icon icon-chevron-right"></i>
-  </button>
+  <button class="button-prev"><i class="icon icon-chevron-left"></i></button>
+  <button class="button-next"><i class="icon icon-chevron-right"></i></button>
   <div class="swiper main-swiper">
     <div class="swiper-wrapper">
-      <div class="swiper-slide" style="background-image: url('images/banner1.jpg');background-repeat: no-repeat;background-size: cover;background-position: center;">
-        <div class="banner-content">
-          <div class="container">
-            <div class="row">
-              <div class="col-md-6">
-                <h2 class="banner-title">Summer Collection</h2>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed eu feugiat amet, libero ipsum enim pharetra hac.</p>
-                <div class="btn-wrap">
-                  <a href="shop.html" class="btn btn-light btn-medium d-flex align-items-center" tabindex="0">Shop it now <i class="icon icon-arrow-io"></i>
-                  </a>
-                </div>
+      <div class="swiper-slide" style="background-image: url('{% static 'image/img1.webp' %}');background-repeat: no-repeat;background-size: cover;background-position: center;">
+        <a href="">
+          <div class="banner-content">
+            <div class="container">
+              <div class="row">
+                <div class="col-md-6"></div>
               </div>
             </div>
           </div>
-        </div>
+        </a>
       </div>
-      <div class="swiper-slide" style="background-image: url('images/banner2.jpg');background-repeat: no-repeat;background-size: cover;background-position: center;">
-        <div class="banner-content">
-          <div class="container">
-            <div class="row">
-              <div class="col-md-6">
-                <h2 class="banner-title">Casual Collection</h2>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed eu feugiat amet, libero ipsum enim pharetra hac.</p>
-                <div class="btn-wrap">
-                  <a href="shop.html" class="btn btn-light btn-light-arrow btn-medium d-flex align-items-center" tabindex="0">Shop it now <i class="icon icon-arrow-io"></i>
-                  </a>
-                </div>
+      <div class="swiper-slide" style="background-image: url('{% static 'image/img2.webp' %}');background-repeat: no-repeat;background-size: cover;background-position: center;">
+        <a href="">
+          <div class="banner-content">
+            <div class="container">
+              <div class="row">
+                <div class="col-md-6"></div>
               </div>
             </div>
           </div>
-        </div>
+        </a>
+      </div>
+      <div class="swiper-slide" style="background-image: url('{% static 'image/img3.webp' %}');background-repeat: no-repeat;background-size: cover;background-position: center;">
+        <a href="">
+          <div class="banner-content">
+            <div class="container">
+              <div class="row">
+                <div class="col-md-6"></div>
+              </div>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="container mt-4 d-sm-block d-none">
+    <div class="row gap-4 py-4">
+      <div class="col cate">
+        <img src="https://lh3.googleusercontent.com/F9G66FwNb3MAkEWZg-V7a1zJgyE2LgpeCGg0w_yHtAjNgswed25mQ9Uwh20qUOoqsW4gPfCkzpFy6RBJQLg4lpndIaZPT0SI=w308-rw" alt="" />
+      </div>
+      <div class="col cate">
+        <img src="https://lh3.googleusercontent.com/wDoU6aMjIcL4zrLcJ1WiGFId5Cl4PCHV4CYw42Dit4DEyVgpGeEv0rVSZws55cEaiGmMnaQvb_7dCrYe4ZQTesBxBYbbFELt_g=w308-rw" alt="" />
+      </div>
+      <div class="col cate">
+        <img src="https://lh3.googleusercontent.com/TeQ7m8oukkfeKFo5xsuvxj2G0NOsv-GUvkOMMl50wAEsflAKILKAJIrvO7AAnfsAJaRgspCw3nD-E_4q-OQIIU5AThYfNkvXng=w308-rw" alt="" />
+      </div>
+      <div class="col cate">
+        <img src="https://lh3.googleusercontent.com/gbeCNxgM4xF216hCFQpRC94j3LIjW-ZwuftBU7AWOV1JpbiEbCQqsFlxBtDvf7an4pF_2pAaU8eGHfal5vYLZ1gEs6iJssm6=w308-rw" alt="" />
       </div>
     </div>
   </div>
