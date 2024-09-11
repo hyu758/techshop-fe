@@ -1,8 +1,8 @@
 {%load static%}
-<section id="featured-products" class="product-store padding-large">
+<section id="featured-products" class="product-store p-3 rounded-1 bg-gray-200 my-5">
   <div class="container">
     <div class="section-header d-flex flex-wrap align-items-center justify-content-between">
-      <h2 class="section-title">Sản phẩm tiêu biểu</h2>
+      <h2 class="section-title py-3">Sản phẩm đề xuất</h2>
       <div class="btn-wrap">
         <a href="/shop" class="d-flex align-items-center">View all products <i class="icon icon icon-arrow-io"></i></a>
       </div>
@@ -13,7 +13,9 @@
           <div class="swiper-slide">
             <div class="product-item">
               <div class="image-holder">
-                <img src="{{ product.image_url }}" alt="{{ product.name }}" class="product-image" />
+                <a href="/product/{{product.id}}/">
+                  <img src="{{ product.image_url }}" alt="{{ product.name }}" class="product-image" />
+                </a>
               </div>
               <div class="cart-concern border-1">
                 <div class="cart-button d-flex justify-content-between align-items-center">
@@ -28,7 +30,7 @@
               <div class="product-detail">
                 <h3 class="product-title"><a href="single-product.html">{{ product.name }}</a></h3>
                 <div class ="d-flex align-items-center gap-2 mb-2">
-                    <div class="stars d-flex rating" data-rating="{{ product.rating }}"></div>
+                    <div class="stars d-flex rating" data-rating="{{ product.rating|default:0 }}"></div>
                     <div class="fs-6 text-secondary px-2 border-start">Đã bán: {{product.sold_quantity}}</div>
                 </div>
                 <span class="item-price text-danger fs-4 fw-semibold">{{ product.price }}₫</span>

@@ -1,0 +1,188 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Product Detail{% endblock %}
+{% block content %}
+    {% include "partials/header.html" %}
+
+    <div class="container bg-pink-100 py-3 my-2 rounded-1">
+        <div class="product-detail">
+            <div class='container flex-row d-flex'>
+                <div class="row">
+                    <!-- Hình ảnh sản phẩm -->
+                    <div class="col-12 col-sm-4 mb-3">
+                        <div class="card border-0">
+                            <img src="{{ product.image_url }}" alt="{{ product.name }}" class="product-image">
+                        </div>
+                    </div>
+
+                    <!-- Thông tin sản phẩm -->
+                    <div class="col-12 col-sm-5 mb-3">
+                        <div class='mb-3'>
+                            <div class="card border-0">
+                                <div class="card-body gap-3">
+                                    <div class="product-detail">
+                                        <h3 class="product-title">
+                                          {{ product.name }}
+                                        </h3>
+                                        <div class="d-flex align-items-center gap-2 mb-2">
+                                            <!-- Phần đánh giá (Rating) -->
+                                            <div class="d-flex rating" data-full-star="{% static 'image/full-star.png' %}" data-half-star="{% static 'image/half-star.png' %}" data-empty-star="{% static 'image/empty-star.png' %}">
+                                                <!-- JavaScript sẽ chèn hình ảnh ngôi sao vào đây -->
+                                            </div>
+                                            <div class="fs-6 text-secondary px-2 border-start">Đã bán: {{ product.sold_quantity }}</div>
+                                        </div>
+                                        <!-- Giá sản phẩm -->
+                                        <div class="item-price text-danger fs-4 fw-semibold" id="product-price">{{ product.price }}₫</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Mô tả sản phẩm -->
+                        <div class="card border-0">
+                            <div class="card-body">
+                                <div class="description-container">
+                                    <ul class="custom-list">
+                                        {% for item in product.description.splitlines %}
+                                            <li>{{ item }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                                <a href="#" class="toggle-description" id="toggle-description" style="font-family: 'Inter', sans-serif;">Xem thêm</a>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="col-sm-6 p-2">
+                                <div class="card border-1 border-blue-700 ">
+                                    <h5 class="card-header bg-blue-700 text-white">TRỢ GIÚP</h5>
+                                    <div class="card-body">
+                                        <ul class="custom-list2">
+                                            <li>Hướng dẫn đặt hàng Flash Sale</li>
+                                            <li>Hướng dẫn mua hàng</li>
+                                            <li>Chính sách bảo hành đổi trả</li>
+                                            <li>Chính sách mua trả góp</li>
+                                            <li>Chính sách giao hàng</li>
+                                            <li>Chính sách bảo hành tận nhà</li>
+                                            <li>Hỗ trợ khách hàng dự án, doanh nghiệp</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 p-2">
+                                <div class="card border-1 border-blue-700 ">
+                                    <h5 class="card-header bg-blue-700 text-white">MUA HÀNG NHANH, TIỆN LỢI</h5>
+                                    <div class="card-body">
+                                        <ul class="custom-list2">
+                                            <li>Mua online - Giao hàng nhanh</li>
+                                            <li>Ship hàng toàn quốc</li>
+                                            <li>Nhận hàng và thanh toán tại nhà ( ship COD)</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Phần tùy chọn số lượng và mua hàng -->
+                    <div class="col-12 col-sm-3 mb-3">
+                        <div class="card border-1">
+                            <div class="card-body">
+                                <!-- Bộ đếm số lượng -->
+                                <div class='p-2'>
+                                    <h5>Số lượng</h5>
+                                    <div class="row">
+                                        <div class="d-flex align-items-center">
+                                            <button class="btn btn-outline-primary" disabled>
+                                                -
+                                            </button>
+                                            <input
+                                                type="number"
+                                                class="form-control mx-2"
+                                                value="1"
+                                                min="1"
+                                                style="width: 60px; text-align: center;"
+                                            />
+                                            <button class="btn btn-outline-primary">
+                                                +
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Giá tạm tính -->
+                                <div class='p-2'>
+                                    <h5>Tạm tính</h5>
+                                    <p class="card-text price">
+                                        0₫
+                                    </p>
+                                </div>
+
+                                <!-- Nút bấm hành động -->
+                                <div class="d-grid gap-2 p-2">
+                                    <button class="btn btn-danger" type="button"style="font-family: 'Inter', sans-serif; font-size:18px">Mua ngay</button>
+                                    <button class="btn btn-outline-primary" type="button"style="font-family: 'Inter', sans-serif; font-size:18px">Thêm vào giỏ hàng</button>
+                                    <button class="btn btn-outline-primary" type="button"style="font-family: 'Inter', sans-serif; font-size:18px">Mua trả góp</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% include "partials/footer.html" %}
+
+    <!-- JavaScript để hiển thị đánh giá (Rating) -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const ratingContainer = document.querySelector('.rating');
+            const rating = {{ product.rating|default:0 }}; // Dữ liệu rating từ Django
+
+            // Lấy các đường dẫn ảnh từ thuộc tính data của div
+            const fullStar = ratingContainer.getAttribute('data-full-star');
+            const halfStar = ratingContainer.getAttribute('data-half-star');
+            const emptyStar = ratingContainer.getAttribute('data-empty-star');
+
+            let fullStars = Math.floor(rating);
+            let halfStars = (rating % 1) >= 0.5 ? 1 : 0;
+            let emptyStars = 5 - fullStars - halfStars;
+
+            let starsHTML = '';
+
+            for (let i = 0; i < fullStars; i++) {
+                starsHTML += `<img src="${fullStar}" alt="Full Star">`;
+            }
+
+            if (halfStars > 0) {
+                starsHTML += `<img src="${halfStar}" alt="Half Star">`;
+            }
+
+            for (let i = 0; i < emptyStars; i++) {
+                starsHTML += `<img src="${emptyStar}" alt="Empty Star">`;
+            }
+
+            ratingContainer.innerHTML = starsHTML;
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const toggleDescription = document.getElementById('toggle-description');
+            const descriptionContainer = document.querySelector('.description-container');
+        
+            toggleDescription.addEventListener('click', function(event) {
+                event.preventDefault();
+        
+                if (descriptionContainer.classList.contains('expanded')) {
+                    descriptionContainer.classList.remove('expanded');
+                    toggleDescription.textContent = 'Xem thêm';
+                } else {
+                    descriptionContainer.classList.add('expanded');
+                    toggleDescription.textContent = 'Thu gọn';
+                }
+            });
+        });
+        
+        
+    </script>
+
+
+{% endblock %}

@@ -6,6 +6,9 @@ from django.contrib import messages
 import random
 
 def format_currency(value):
+    if isinstance(value, str):
+        value = value.replace(',', '')
+    
     return "{:,.0f}".format(float(value))
 
 def login(request):
@@ -69,25 +72,65 @@ def home(request):
     
     if response.status_code == 200:
         products = response.json()
-        products.sort(key = lambda x: x['sold_quantity'])
-        for product in products:
-            product['price'] = format_currency(product['price'])
-    else:
-        products = []
 
-    return render(request, 'home.html', {'products': products})
+        bestseller_products = products.copy() 
+        recommend_products = products.copy()
+        cheapest_products = products.copy()
+
+        bestseller_products.sort(key = lambda x: x['sold_quantity'], reverse = True)
+        recommend_products.sort(key = lambda x: x['price'], reverse = True)
+        cheapest_products.sort(key = lambda x: x['price'])
+
+        for product in bestseller_products:
+            product['price'] = format_currency(product['price'])
+
+        for product in recommend_products:
+            product['price'] = format_currency(product['price'])
+        
+        for product in cheapest_products:
+            product['price'] = format_currency(product['price'])
+
+            
+        bestseller_products =  bestseller_products[0:8]
+        recommend_products = recommend_products[0:8]
+        cheapest_products = cheapest_products[0:8]
+
+    else:
+        bestseller_products = [] 
+        recommend_products = []
+        cheapest_products = []
+
+    context = {
+        'bestseller_products': bestseller_products,
+        'recommend_products': recommend_products,
+        'cheapest_products' : cheapest_products
+    }
+
+    return render(request, 'home.html', context)
 
 def shop(request):
     url = "https://techshop-backend-c7hy.onrender.com/api/getAllProducts"
     response = requests.get(url)
+    brands_set = set()
     
     if response.status_code == 200:
         products = response.json()
+    
         for product in products:
             product['price'] = format_currency(product['price'])
+            brands_set.add(product['brand'].strip())
+        
+        brands = sorted(brands_set)
     else:
         products = []
-    return render(request, 'shop.html', {'products': products})
+        brands = []
+
+
+    context = {
+        'products': products,
+        'brands': brands
+    }
+    return render(request, 'shop.html', context)
 
 def api_get_all_products(request):
     url = "https://techshop-backend-c7hy.onrender.com/api/getAllProducts"
@@ -96,7 +139,7 @@ def api_get_all_products(request):
     if response.status_code == 200:
         products = response.json()
         for product in products:
-            product['price'] = format_currency(product['price'])
+            product['price'] = float(product['price'])
     else:
         products = []
 
@@ -105,6 +148,20 @@ def api_get_all_products(request):
     if category_id != '0':
         # Lọc sản phẩm theo category_id
         products = [product for product in products if product['category_id'] == int(category_id)]
+
+    # Xử lý price_range
+    price_range = request.GET.get('price_range', '')
+    if price_range:
+        try:
+            price_from, price_to = map(float, price_range.split('-'))
+            products = [product for product in products if price_from <= product['price'] <= price_to]
+        except ValueError:
+            products = []
+
+    # Lọc theo thương hiệu
+    brand = request.GET.get('brand', '')
+    if brand:
+        products = [product for product in products if product['brand'].lower() == brand.lower()]
 
     # Lấy page và page_size từ query params (mặc định là trang 1 và 9 sản phẩm mỗi trang)
     page = int(request.GET.get('page', 1))
@@ -117,6 +174,10 @@ def api_get_all_products(request):
     # Lấy ra sản phẩm cho trang hiện tại
     paginated_products = products[start_index:end_index]
 
+    # Định dạng lại giá cho các sản phẩm trong trang hiện tại
+    for product in paginated_products:
+        product['price'] = format_currency(product['price'])
+
     # Trả về dữ liệu cùng với tổng số trang
     total_pages = (len(products) + page_size - 1) // page_size  # Tính tổng số trang
     data = {
@@ -126,3 +187,21 @@ def api_get_all_products(request):
     }
 
     return JsonResponse(data)
+
+
+def product_detail(request, product_id):
+    # Fetch product details from API
+    url = f"https://techshop-backend-c7hy.onrender.com/api/getProductDetails/{product_id}"
+    response = requests.get(url)
+
+    if response.status_code == 200:
+        product = response.json()
+        product["price"] = format_currency(product["price"])
+    else:
+        product = None
+
+    context = {
+        'product': product,
+    }
+
+    return render(request, 'productDetail.html', context)

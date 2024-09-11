@@ -5,8 +5,11 @@
 <!-- Main content -->
 <div style="background-color: #f8fafc;">
     {% include 'partials/slide.html'%}
-    {% include 'components/featuredProducts.html' %}
-    {% include 'components/recommendProducts.html' %}
+    <div class ="container">
+        {% include 'components/featuredProducts.html' %}
+        {% include 'components/recommendProducts.html' %}
+        {% include 'components/cheapestProducts.html' %}
+    </div>
 </div>
 {% include 'partials/footer.html' %}
 {% endblock %}

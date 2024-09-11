@@ -1,3 +1,5 @@
+{% load static %}
+
 <header id="header">
     <div id="header-wrap">
       <nav class="secondary-nav border-bottom">
@@ -9,19 +11,19 @@
             <div class="col-md-4 shipping-purchase text-center">
             </div>
             <div class="col-md-4 col-sm-12 user-items">
-              <ul class="d-flex justify-content-end list-unstyled">
+              <ul class="d-flex justify-content-end list-unstyled align-items-center">
                 <li>
                   <a href="/login">
-                    <i class="icon icon-user"></i>
+                    <i class="icon icon-user" style="font-size: 24px;"></i>
                   </a>
                 </li>
                 <li>
                   <a href="/cart">
-                    <i class="icon icon-shopping-cart"></i>
+                    <i class="icon icon-shopping-cart" style="font-size: 24px;"></i>
                   </a>
                 </li>
                 <li class="user-items search-item pe-3">
-                  <a href="#" class="search-button">
+                  <a href="#" class="search-button" style="font-size: 24px;">
                     <i class="icon icon-search"></i>
                   </a>
                 </li>
@@ -30,13 +32,13 @@
           </div>
         </div>
       </nav>
-      <nav class="primary-nav padding-small">
+      <nav class="primary-nav p-1">
         <div class="container">
           <div class="row d-flex align-items-center">
             <div class="col-lg-2 col-md-2">
               <div class="main-logo">
                 <a href="/">
-                  <img src="images/main-logo.png" alt="logo">
+                  <img src="{% static 'image/logo-chan.png' %}" alt="logo" width="120px" height="120px">
                 </a>
               </div>
             </div>

@@ -1027,6 +1027,11 @@ h2.product-title{
     margin: 0;
 }
 
+h3.product-title{
+  font-size: 1.8em;
+  margin: 0;
+}
+
 /* - Section Padding
 --------------------------------------------------------------*/
 .padding-xsmall {
@@ -2958,4 +2963,83 @@ section.categories .category-content a{
 --------------------------------------------------------------*/
 .jarallax.min-height300 {
     min-height: 300px;
+}
+
+.tags-item a{
+  font-family: "Inter", sans-serif;
+  padding: 2px 6px;
+  border-radius: 4px;
+
+}
+
+.tags-item .active {
+  background-color: #6995B1;
+  color: white !important;
+}
+
+.price-filter{
+  font-family: "Inter", sans-serif;
+}
+
+.carousel-inner img {
+  height: 600px; 
+  object-fit: cover; 
+}
+
+.custom-list {
+  list-style: none;
+  padding-left: 0;
+}
+
+.custom-list li {
+  font-family: "Inter", sans-serif;
+  position: relative;
+  padding-left: 20px; 
+}
+
+.custom-list li::before {
+  content: "\2714"; 
+  position: absolute;
+  left: 0;
+  color: green; 
+}
+
+.custom-list2 li {
+  font-family: "Inter", sans-serif;
+  position: relative;
+  padding-left: 20px; 
+}
+
+.custom-list2 li::before {
+  content: "\2714"; 
+  position: absolute;
+  left: 0;
+  color: black; 
+}
+
+
+.description-container {
+  max-height: 80px; /* Khoảng 4 dòng */
+  overflow: hidden;
+  position: relative;
+}
+
+.description-container.expanded {
+  max-height: none;
+}
+
+.toggle-description {
+  display: block;
+  margin-top: 10px;
+  color: #007bff;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.toggle-description:hover {
+  text-decoration: underline;
+}
+
+.fontVN{
+  font-family: "Inter", sans-serif;
 }

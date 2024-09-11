@@ -1,15 +1,15 @@
 {%load static%}
-<section id="featured-products" class="product-store p-3 rounded-1 bg-blue-100 my-5">
+<section id="featured-products" class="product-store p-3 rounded-1 bg-green-200 my-5">
   <div class="container">
     <div class="section-header d-flex flex-wrap align-items-center justify-content-between">
-      <h2 class="section-title py-3">Sản phẩm bán chạy</h2>
+      <h2 class="section-title py-3">Sản phẩm siêu rẻ</h2>
       <div class="btn-wrap">
         <a href="/shop" class="d-flex align-items-center">View all products <i class="icon icon icon-arrow-io"></i></a>
       </div>
     </div>
     <div class="swiper product-swiper overflow-hidden">
       <div class="swiper-wrapper">
-        {% for product in bestseller_products %}
+        {% for product in cheapest_products %}
           <div class="swiper-slide">
             <div class="product-item">
               <div class="image-holder">
