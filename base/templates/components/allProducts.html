@@ -1,341 +1,362 @@
 {% load static %}
 
-  <div class="shopify-grid padding-large">
-    <div class="container">
-      <div class="row">
-        <section id="selling-products" class="col-md-9 product-store">
-          <div class="container">
-            <ul class="tabs list-unstyled">
-              <li data-tab-target="#all" cate-id="0" class="active tab">All</li>
-              <li data-tab-target="#Laptop" cate-id="1" class="tab">Laptop</li>
-              <li data-tab-target="#PC" cate-id="5" class="tab">PC</li>
-              <li data-tab-target="#Keyboard" cate-id="3" class="tab">Keyboard</li>
-              <li data-tab-target="#Mouse" cate-id="4" class="tab">Mouse</li>
-              <li data-tab-target="#Monitor" cate-id="2" class="tab">Monitor</li>
+<div class="shopify-grid padding-large">
+  <div class="container">
+    <div class="row">
+      <section id="selling-products" class="col-md-9 product-store">
+        <div class="container">
+          <ul class="tabs list-unstyled">
+            <li data-tab-target="#all" cate-id="0" class="active tab">All</li>
+            <li data-tab-target="#Laptop" cate-id="1" class="tab">Laptop</li>
+            <li data-tab-target="#PC" cate-id="5" class="tab">PC</li>
+            <li data-tab-target="#Keyboard" cate-id="3" class="tab">Keyboard</li>
+            <li data-tab-target="#Mouse" cate-id="4" class="tab">Mouse</li>
+            <li data-tab-target="#Monitor" cate-id="2" class="tab">Monitor</li>
+          </ul>
+          <div class="tab-content">
+            <div id="all" data-tab-content class="active">
+              <div class="spinner-wrapper w-100 d-flex">
+                <div class="spinner justify-content-center align-items-center"></div>
+              </div>
+              <div class="row d-flex flex-wrap" id="product-list">
+              </div>
+            </div>
+          </div>
+          <nav class="navigation paging-navigation text-center padding-medium" role="navigation">
+            <div class="pagination loop-pagination d-flex justify-content-center">
+              <a href="#" class="pagination-arrow d-flex align-items-center">
+                <i class="icon icon-arrow-left"></i>
+              </a>
+              <span aria-current="page" class="page-numbers current">1</span>
+              <a class="page-numbers" href="#">2</a>
+              <a class="page-numbers" href="#">3</a>
+              <a href="#" class="pagination-arrow d-flex align-items-center">
+                <i class="icon icon-arrow-right"></i>
+              </a>
+            </div>
+          </nav>
+        </div>
+      </section>
+      <aside class="col-md-3 ps-2">
+        <div class="sidebar">
+          <div class="widgets widget-menu">
+            <div class="widget-search-bar">
+              <form role="search" method="get" class="d-flex">
+                <input class="search-field" placeholder="Search" type="text">
+                <button class="btn btn-dark"><i class="icon icon-search"></i></button>
+              </form>
+            </div>
+          </div>
+        </div>
+        <div class="d-flex justify-content-center gap-5">
+          <div class="widgets widget-product-brands ps-4">
+            <h5 class="widget-title">Brands</h5>
+            <ul class="product-tags sidebar-list list-unstyled">
+              {% for brand in brands %}
+                <li class="tags-item">
+                  <a href="#" data-brand="{{ brand }}">{{ brand }}</a>
+                </li>
+              {% endfor %}
             </ul>
-            <div class="tab-content">
-              <div id="all" data-tab-content class="active">
-                <div class="spinner-wrapper w-100 d-flex">
-                  <div class="spinner justify-content-center align-items-center"></div>
-                </div>
-                <div class="row d-flex flex-wrap" id="product-list">
-
-                </div>
-              </div>
-            </div>
-            <nav class="navigation paging-navigation text-center padding-medium" role="navigation">
-              <div class="pagination loop-pagination d-flex justify-content-center">
-                <a href="#" class="pagination-arrow d-flex align-items-center">
-                  <i class="icon icon-arrow-left"></i>
-                </a>
-                <span aria-current="page" class="page-numbers current">1</span>
-                <a class="page-numbers" href="#">2</a>
-                <a class="page-numbers" href="#">3</a>
-                <a href="#" class="pagination-arrow d-flex align-items-center">
-                  <i class="icon icon-arrow-right"></i>
-                </a>
-              </div>
-            </nav>
           </div>
-            <!-- Pagination, sidebar, etc. here -->
-        </section>
-        <aside class="col-md-3 ps-2">
-          <div class="sidebar">
-            <div class="widgets widget-menu">
-              <div class="widget-search-bar">
-                <form role="search" method="get" class="d-flex">
-                  <input class="search-field" placeholder="Search" type="text">
-                  <button class="btn btn-dark" ><i class="icon icon-search"></i></button>
-                </form>
-              </div> 
+          <div class="d-flex row">
+            <div class="widgets widget-price-filter">
+              <h5 class="widget-title">Price</h5>
+              <ul class="product-tags sidebar-list list-unstyled">
+                <li class="tags-item">
+                  <a href="#" data-price-filter="0-1">Dưới 1 triệu</a>
+                </li>
+                <li class="tags-item">
+                  <a href="#" data-price-filter="1-2">1 triệu - 2 triệu</a>
+                </li>
+                <li class="tags-item">
+                  <a href="#" data-price-filter="2-3">2 triệu - 3 triệu</a>
+                </li>
+                <li class="tags-item">
+                  <a href="#" data-price-filter="3-10">3 triệu - 10 triệu</a>
+                </li>
+                <li class="tags-item">
+                  <a href="#" data-price-filter="10-30">10 triệu - 30 triệu</a>
+                </li>
+                <li class="tags-item">
+                  <a href="#" data-price-filter="30-999">Trên 30 triệu</a>
+                </li>
+              </ul>
             </div>
-          </div>
-
-            <div class="d-flex justify-content-center gap-5">
-              <div class="widgets widget-product-brands ps-4">
-                <h5 class="widget-title">Brands</h5>
-                <ul class="product-tags sidebar-list list-unstyled">
-                  {% for brand in brands %}
-                    <li class="tags-item">
-                      <a href="">{{brand}}</a>
-                    </li>
-                  {% endfor %}
-                </ul>
-              </div>
-              <div class = "d-flex row">
-                <div class="widgets widget-price-filter">
-                  <h5 class="widget-title">Price</h5>
-                  <ul class="product-tags sidebar-list list-unstyled">
-                    <li class="tags-item">
-                      <a href="#" data-price-filter="0-1">Dưới 1 triệu</a>
-                    </li>
-                    <li class="tags-item">
-                      <a href="#" data-price-filter="1-2">1 triệu - 2 triệu</a>
-                    </li>
-                    <li class="tags-item">
-                      <a href="#" data-price-filter="2-3">2 triệu - 3 triệu</a>
-                    </li>
-                    <li class="tags-item">
-                      <a href="#" data-price-filter="3-10">3 triệu - 10 triệu</a>
-                    </li>
-                    <li class="tags-item">
-                      <a href="#" data-price-filter="10-30">10 triệu - 30 triệu</a>
-                    </li>
-                    <li class="tags-item">
-                      <a href="#" data-price-filter="30-999">Trên 30 triệu</a>
-                    </li>
-                  </ul>
+            <div class="price-filter">
+              <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 10px;">
+                <div>
+                  <label for="price-min" style="display: block; margin-bottom: 5px;">Giá từ:</label>
+                  <input type="number" id="price-min" placeholder="Min" min="0" max="999999999" step="100000" />
                 </div>
-                <div class="price-filter">
-                  <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 10px;">
-                    <div>
-                      <label for="price-min" style="display: block; margin-bottom: 5px;">Giá từ:</label>
-                      <input type="number" id="price-min" placeholder="Min" min="0" max="999999999" step="100000" />
-                    </div>
-                    <div>
-                      <label for="price-max" style="display: block; margin-bottom: 5px;">Giá đến:</label>
-                      <input type="number" id="price-max" placeholder="Max" min="0" max="999999999" step="100000" />
-                    </div>
-                  </div>
-                  <button id="apply-price-filter" class="btn btn-secondary">Áp dụng</button>
+                <div>
+                  <label for="price-max" style="display: block; margin-bottom: 5px;">Giá đến:</label>
+                  <input type="number" id="price-max" placeholder="Max" min="0" max="999999999" step="100000" />
                 </div>
-                
               </div>
+              <button id="apply-price-filter" class="btn btn-secondary">Áp dụng</button>
             </div>
           </div>
-        </aside>
-      </div>
-    </div>      
+        </div>
+      </aside>
+    </div>
   </div>
+</div>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const preloader = document.querySelector('.spinner-wrapper');
-      const paginationContainer = document.querySelector('.pagination.loop-pagination');
-      const productList = document.querySelector('#product-list');
-      const priceFilters = document.querySelectorAll('.widget-price-filter a');
-      let currentPage = 1;
-      const pageSize = 9; // Số sản phẩm trên mỗi trang
-      let currentPriceRange = '';
-      let currentCategoryId = '0'; // Thay đổi nếu cần
-      let currentBrand = ''; // Thay đổi theo thương hiệu
+{{ products|json_script:"products-data" }}
+
+
+<script>
+  function parsePrice(priceString) {
+    // Loại bỏ dấu phân cách hàng nghìn và chuyển đổi thành số
+    return parseFloat(priceString.replace(/,/g, ''));
+  }
+  let products = [];
+  const productsData = JSON.parse(document.getElementById('products-data').textContent);
+  products = productsData;
+// Khi trang được tải, lấy dữ liệu sản phẩm từ thẻ script và lưu vào biến toàn cục
+  document.addEventListener('DOMContentLoaded', function() {
+    const preloader = document.querySelector('.spinner-wrapper');
+    const paginationContainer = document.querySelector('.pagination.loop-pagination');
+    const productList = document.querySelector('#product-list');
+    const priceFilters = document.querySelectorAll('.widget-price-filter a');
+    const brandFilters = document.querySelectorAll('.widget-product-brands .tags-item a');
+    let currentPage = 1;
+    const pageSize = 9; // Số sản phẩm trên mỗi trang
+    let currentPriceRange = '';
+    let currentCategoryId = '0'; // Thay đổi nếu cần
+    let currentBrand = ''; // Thay đổi theo thương hiệu
     
-      function getRating(rating) {
-        const fullStar = "{% static '/image/full-star.png' %}";
-        const halfStar = "{% static '/image/half-star.png' %}";
-        const emptyStar = "{% static '/image/empty-star.png' %}";
-    
-        let fullStars = Math.floor(rating);
-        let halfStars = (rating % 1) >= 0.5 ? 1 : 0;
-        let emptyStars = 5 - fullStars - halfStars;
-    
-        let starsHTML = '';
-    
-        for (let i = 0; i < fullStars; i++) {
-          starsHTML += `<img src="${fullStar}" alt="Full Star">`;
-        }
-    
-        if (halfStars > 0) {
-          starsHTML += `<img src="${halfStar}" alt="Half Star">`;
-        }
-    
-        for (let i = 0; i < emptyStars; i++) {
-          starsHTML += `<img src="${emptyStar}" alt="Empty Star">`;
-        }
-    
-        return starsHTML;
+    function getRating(rating) {
+      const fullStar = "{% static '/image/full-star.png' %}";
+      const halfStar = "{% static '/image/half-star.png' %}";
+      const emptyStar = "{% static '/image/empty-star.png' %}";
+  
+      let fullStars = Math.floor(rating);
+      let halfStars = (rating % 1) >= 0.5 ? 1 : 0;
+      let emptyStars = 5 - fullStars - halfStars;
+  
+      let starsHTML = '';
+  
+      for (let i = 0; i < fullStars; i++) {
+        starsHTML += `<img src="${fullStar}" alt="Full Star">`;
       }
-    
-      function fetchProducts(categoryId, page = 1, priceRange = '', brand = '') {
-        // Hiển thị spinner trước khi bắt đầu fetch sản phẩm
-        preloader.classList.remove('d-none');
-        preloader.classList.add('d-block');
-    
-        // Tạo URL với tham số lọc và phân trang
-        const url = categoryId === '0'
-          ? `/api/products/?page=${page}&page_size=${pageSize}&price_range=${priceRange}&brand=${brand}`
-          : `/api/products/?category_id=${categoryId}&page=${page}&page_size=${pageSize}&price_range=${priceRange}&brand=${brand}`;
-    
-        fetch(url)
-          .then(response => response.json())
-          .then(data => {
-            const products = data.products; // Giả sử API trả về mảng sản phẩm
-            const totalPages = data.total_pages; // Giả sử API trả về tổng số trang
-    
-            // Xây dựng HTML cho sản phẩm
-            let productHTML = '';
-            products.forEach(product => {
-              let rating = getRating(product.rating);
-              productHTML += `
-                <div class="product-item col-lg-4 col-md-6 col-sm-6" style="margin-bottom: 80px !important" data-category-id="${product.category_id}">
-                  <div class="image-holder">
-                    <a href="/product/${product.id}/">
-                      <img src="${product.image_url}" alt="${product.name}" class="product-image">
-                    </a>
-                  </div>
-                  <div class="cart-concern border-1">
-                    <div class="cart-button d-flex justify-content-between align-items-center">
-                      <button type="button" class="btn-wrap cart-link d-flex align-items-center">add to cart <i class="icon icon-arrow-io"></i></button>
-                      <button type="button" class="view-btn tooltip d-flex">
-                        <i class="icon icon-screen-full"></i>
-                        <span class="tooltip-text">Quick view</span>
-                      </button>
-                      <button type="button" class="wishlist-btn">
-                        <i class="icon icon-heart"></i>
-                      </button>
-                    </div>
-                  </div>
-                  <div class="product-detail">
-                    <h3 class="product-title">
-                      <a href="single-product.html">${product.name}</a>
-                    </h3>
-                    <div class="d-flex align-items-center gap-2 mb-2">
-                      <div class="d-flex rating">
-                        ${rating}
-                      </div>
-                      <div class="fs-6 text-secondary px-2 border-start">Đã bán: ${product.sold_quantity}</div>
-                    </div>
-                    <div class="item-price text-danger fs-4 fw-semibold">${product.price}₫</div>
-                  </div>
-                </div>
-              `;
-            });
-    
-            // Cập nhật nội dung danh sách sản phẩm
-            productList.innerHTML = productHTML;
-            preloader.classList.add('d-none');
-            preloader.classList.remove('d-block');
-    
-            // Cập nhật pagination
-            renderPagination(totalPages, categoryId);
-          })
-          .catch(error => {
-            console.error('Error fetching products:', error);
-            preloader.classList.add('d-none');
-            preloader.classList.remove('d-block');
-          });
+  
+      if (halfStars > 0) {
+        starsHTML += `<img src="${halfStar}" alt="Half Star">`;
       }
-    
-      function renderPagination(totalPages, categoryId) {
-        paginationContainer.innerHTML = '';
-    
-        for (let page = 1; page <= totalPages; page++) {
-          const pageButton = document.createElement('a');
-          pageButton.classList.add('page-numbers');
-          if (page === currentPage) {
-            pageButton.classList.add('current');
-          }
-          pageButton.textContent = page;
-    
-          pageButton.addEventListener('click', function() {
-            currentPage = page;
-            fetchProducts(categoryId, currentPage, currentPriceRange, currentBrand);
-          });
-    
-          paginationContainer.appendChild(pageButton);
-        }
-    
-        // Thêm các nút 'Previous' và 'Next'
-        if (currentPage > 1) {
-          const prevButton = document.createElement('a');
-          prevButton.classList.add('pagination-arrow', 'd-flex', 'align-items-center');
-          prevButton.innerHTML = '<i class="icon icon-arrow-left"></i>';
-          prevButton.addEventListener('click', function() {
-            currentPage--;
-            fetchProducts(categoryId, currentPage, currentPriceRange, currentBrand);
-          });
-          paginationContainer.prepend(prevButton);
-        }
-    
-        if (currentPage < totalPages) {
-          const nextButton = document.createElement('a');
-          nextButton.classList.add('pagination-arrow', 'd-flex', 'align-items-center');
-          nextButton.innerHTML = '<i class="icon icon-arrow-right"></i>';
-          nextButton.addEventListener('click', function() {
-            currentPage++;
-            fetchProducts(categoryId, currentPage, currentPriceRange, currentBrand);
-          });
-          paginationContainer.appendChild(nextButton);
-        }
+  
+      for (let i = 0; i < emptyStars; i++) {
+        starsHTML += `<img src="${emptyStar}" alt="Empty Star">`;
       }
-    
-      // Xử lý sự kiện click cho các tab lọc sản phẩm
-      const tabs = document.querySelectorAll('.tabs .tab');
-      tabs.forEach(tab => {
-        tab.addEventListener('click', function() {
-          const categoryId = this.getAttribute('cate-id');
-          tabs.forEach(t => t.classList.remove('active'));
-          this.classList.add('active');
-    
-          currentCategoryId = categoryId;
-          currentPage = 1;
-          fetchProducts(currentCategoryId, currentPage, currentPriceRange, currentBrand);
-        });
+  
+      return starsHTML;
+    }
+  
+    function applyFilters() {
+      console.log('Products:', products);
+      console.log('Current Price Range:', currentPriceRange);
+      console.log('Current Brand:', currentBrand);
+      console.log('Current Category ID:', currentCategoryId);
+  
+      // Sử dụng dữ liệu sản phẩm đã lưu trữ
+      const filteredProducts = products.filter(product => {
+          // Áp dụng lọc theo khoảng giá
+          const [minPrice, maxPrice] = currentPriceRange.split('-').map(Number);
+          console.log(minPrice, maxPrice)
+          const inPriceRange = parsePrice(product.price) >= (parseInt(minPrice) || 0) && parsePrice(product.price) <= (parseInt(maxPrice) || Infinity);
+          // Áp dụng lọc theo thương hiệu
+          const inBrand = currentBrand ? product.brand === currentBrand : true;
+  
+          // Áp dụng lọc theo danh mục
+          const inCategory = currentCategoryId === '0' || product.category_id === parseInt(currentCategoryId, 10);
+
+          return  inPriceRange && inBrand && inCategory; 
       });
-    
-      // Xử lý sự kiện click cho các bộ lọc giá
-      priceFilters.forEach(filter => {
-        filter.addEventListener('click', function(event) {
+  
+      console.log('Filtered Products:', filteredProducts);
+  
+      // Xây dựng HTML cho sản phẩm
+      let productHTML = '';
+      filteredProducts.forEach(product => {
+          let rating = getRating(product.rating);
+          productHTML += `
+            <div class="product-item col-lg-4 col-md-6 col-sm-6" style="margin-bottom: 80px !important" data-category-id="${product.category_id}">
+              <div class="image-holder">
+                <a href="/product/${product.id}/">
+                  <img src="${product.image_url}" alt="${product.name}" class="product-image">
+                </a>
+              </div>
+              <div class="cart-concern border-1">
+                <div class="cart-button d-flex justify-content-between align-items-center">
+                  <button type="button" class="btn-wrap cart-link d-flex align-items-center">add to cart <i class="icon icon-arrow-io"></i></button>
+                  <button type="button" class="view-btn tooltip d-flex">
+                    <i class="icon icon-screen-full"></i>
+                    <span class="tooltip-text">Quick view</span>
+                  </button>
+                  <button type="button" class="wishlist-btn">
+                    <i class="icon icon-heart"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="product-detail">
+                <h3 class="product-title">
+                  <a href="/product/${product.id}/">${product.name}</a>
+                </h3>
+                <div class="d-flex align-items-center gap-2 mb-2">
+                  <div class="d-flex rating">
+                    ${rating}
+                  </div>
+                  <div class="fs-6 text-secondary px-2 border-start">Đã bán: ${product.sold_quantity}</div>
+                </div>
+                <div class="item-price text-danger fs-4 fw-semibold">${product.price}₫</div>
+              </div>
+            </div>
+          `;
+      });
+  
+      // Cập nhật nội dung danh sách sản phẩm
+      productList.innerHTML = productHTML;
+      preloader.classList.add('d-none');
+      preloader.classList.remove('d-block');
+  }
+  
+    function renderPagination(totalPages) {
+      paginationContainer.innerHTML = '';
+  
+      for (let page = 1; page <= totalPages; page++) {
+        const pageButton = document.createElement('a');
+        pageButton.classList.add('page-numbers');
+        if (page === currentPage) {
+          pageButton.classList.add('current');
+        }
+        pageButton.textContent = page;
+  
+        pageButton.addEventListener('click', function() {
+          currentPage = page;
+          applyFilters(); // Gọi applyFilters để cập nhật sản phẩm trên trang
+        });
+  
+        paginationContainer.appendChild(pageButton);
+      }
+  
+      // Thêm các nút 'Previous' và 'Next'
+      if (currentPage > 1) {
+        const prevButton = document.createElement('a');
+        prevButton.classList.add('pagination-arrow', 'd-flex', 'align-items-center');
+        prevButton.innerHTML = '<i class="icon icon-arrow-left"></i>';
+        prevButton.addEventListener('click', function() {
+          currentPage--;
+          applyFilters();
+        });
+        paginationContainer.prepend(prevButton);
+      }
+  
+      if (currentPage < totalPages) {
+        const nextButton = document.createElement('a');
+        nextButton.classList.add('pagination-arrow', 'd-flex', 'align-items-center');
+        nextButton.innerHTML = '<i class="icon icon-arrow-right"></i>';
+        nextButton.addEventListener('click', function() {
+          currentPage++;
+          applyFilters();
+        });
+        paginationContainer.appendChild(nextButton);
+      }
+    }
+  
+    // Xử lý sự kiện click cho các tab lọc sản phẩm
+    const tabs = document.querySelectorAll('.tabs .tab');
+    tabs.forEach(tab => {
+      tab.addEventListener('click', function() {
+        const categoryId = this.getAttribute('cate-id');
+        tabs.forEach(t => t.classList.remove('active'));
+        this.classList.add('active');
+  
+        currentCategoryId = categoryId;
+        currentPage = 1;
+        applyFilters();
+      });
+    });
+  
+    // Xử lý sự kiện click cho các bộ lọc giá
+    priceFilters.forEach(filter => {
+      filter.addEventListener('click', function(event) {
           event.preventDefault();
           // Lấy khoảng giá từ thuộc tính data-price-filter
           let priceRange = this.getAttribute('data-price-filter');
-          
-          // Tách giá từ khoảng giá và nhân với 1.000.000
+          // Tách giá từ khoảng giá
           let [min, max] = priceRange.split('-').map(Number);
-          min *= 1000000;
-          max *= 1000000;
-          
-          // Cập nhật URL và gọi hàm fetchProducts với khoảng giá đã chỉnh sửa
-          currentPriceRange = `${min}-${max}`;
+  
+          // Cập nhật khoảng giá
+          currentPriceRange = `${min * 1000000}-${max * 1000000}`;
           console.log("currentPriceRange", currentPriceRange);
-    
+  
           // Đánh dấu filter giá hiện tại
           priceFilters.forEach(pf => pf.classList.remove('active'));
           this.classList.add('active');
-    
-          fetchProducts(currentCategoryId, 1, currentPriceRange, currentBrand);
-        });
+  
+          applyFilters();
       });
-    
-      // Xử lý sự kiện click cho nút áp dụng khoảng giá
-      document.getElementById('apply-price-filter').addEventListener('click', function() {
-        const minPrice = parseFloat(document.getElementById('price-min').value) || 0;
-        const maxPrice = parseFloat(document.getElementById('price-max').value) || 999999999; // Giá tối đa lớn hơn bất kỳ giá sản phẩm nào
-        
-        // Cập nhật khoảng giá
-        currentPriceRange = `${minPrice}-${maxPrice}`;
-        console.log("currentPriceRange", currentPriceRange);
-    
-        // Đánh dấu filter giá hiện tại
-        priceFilters.forEach(pf => pf.classList.remove('active'));
-    
-        fetchProducts(currentCategoryId, 1, currentPriceRange, currentBrand);
+  });
+  
+  // Xử lý sự kiện click cho nút áp dụng khoảng giá
+  document.getElementById('apply-price-filter').addEventListener('click', function() {
+      const minPrice = parseFloat(document.getElementById('price-min').value) || 0;
+      const maxPrice = parseFloat(document.getElementById('price-max').value) || 999999999; // Giá tối đa lớn hơn bất kỳ giá sản phẩm nào
+  
+      // Cập nhật khoảng giá
+      currentPriceRange = `${minPrice}-${maxPrice}`;
+      console.log("currentPriceRange", currentPriceRange);
+  
+      // Đánh dấu filter giá hiện tại
+      priceFilters.forEach(pf => pf.classList.remove('active'));
+  
+      applyFilters();
+  });
+  
+    // Xử lý sự kiện click cho các bộ lọc thương hiệu
+    brandFilters.forEach(filter => {
+      filter.addEventListener('click', function(event) {
+        event.preventDefault();
+        // Lấy brand từ thuộc tính href
+        const brand = this.textContent.trim();
+  
+        // Cập nhật brand hiện tại
+        currentBrand = brand;
+  
+        // Đánh dấu filter thương hiệu hiện tại
+        brandFilters.forEach(bf => bf.classList.remove('active'));
+        this.classList.add('active');
+  
+        // Cập nhật các sản phẩm và phân trang
+        currentPage = 1;
+        applyFilters();
       });
-    
-      // Xử lý sự kiện click cho các bộ lọc thương hiệu
-      const brandFilters = document.querySelectorAll('.widget-product-brands .tags-item a');
-      brandFilters.forEach(filter => {
-        filter.addEventListener('click', function(event) {
-          event.preventDefault();
-          // Lấy brand từ thuộc tính href
-          const brand = this.textContent.trim();
-          
-          // Cập nhật brand hiện tại
-          currentBrand = brand;
-    
-          // Đánh dấu filter thương hiệu hiện tại
-          brandFilters.forEach(bf => bf.classList.remove('active'));
-          this.classList.add('active');
-    
-          fetchProducts(currentCategoryId, 1, currentPriceRange, currentBrand);
-        });
-      });
-    
-      // Khởi tạo fetch sản phẩm với các tham số mặc định
-      fetchProducts(currentCategoryId, currentPage, currentPriceRange, currentBrand);
     });
-    
-  </script>
   
+    // Xử lý phân trang
+    function updatePagination() {
+      // Lấy số lượng sản phẩm hiện tại
+      const productsData = JSON.parse(document.getElementById('products-data').textContent);
+      const filteredProducts = productsData.filter(product => {
+        // Áp dụng các bộ lọc hiện tại
+        const minPrice = parseFloat(currentPriceRange.split('-')[0]) || 0;
+        const maxPrice = parseFloat(currentPriceRange.split('-')[1]) || Infinity;
+        const inPriceRange = product.price >= minPrice && product.price <= maxPrice;
   
+        const inBrand = currentBrand ? product.brand === currentBrand : true;
+        const inCategory = currentCategoryId === '0' || product.category_id === parseInt(currentCategoryId, 10);
   
+        return inPriceRange && inBrand && inCategory;
+      });
+  
+      // Tính số trang và cập nhật phân trang
+      const totalPages = Math.ceil(filteredProducts.length / pageSize);
+      renderPagination(totalPages);
+    }
+  
+    // Gọi applyFilters và updatePagination khi trang tải xong
+    applyFilters();
+    updatePagination();
+  });
+</script>

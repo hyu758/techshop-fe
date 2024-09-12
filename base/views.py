@@ -132,62 +132,6 @@ def shop(request):
     }
     return render(request, 'shop.html', context)
 
-def api_get_all_products(request):
-    url = "https://techshop-backend-c7hy.onrender.com/api/getAllProducts"
-    response = requests.get(url)
-    
-    if response.status_code == 200:
-        products = response.json()
-        for product in products:
-            product['price'] = float(product['price'])
-    else:
-        products = []
-
-    # Lấy category_id từ query params
-    category_id = request.GET.get('category_id', '0')
-    if category_id != '0':
-        # Lọc sản phẩm theo category_id
-        products = [product for product in products if product['category_id'] == int(category_id)]
-
-    # Xử lý price_range
-    price_range = request.GET.get('price_range', '')
-    if price_range:
-        try:
-            price_from, price_to = map(float, price_range.split('-'))
-            products = [product for product in products if price_from <= product['price'] <= price_to]
-        except ValueError:
-            products = []
-
-    # Lọc theo thương hiệu
-    brand = request.GET.get('brand', '')
-    if brand:
-        products = [product for product in products if product['brand'].lower() == brand.lower()]
-
-    # Lấy page và page_size từ query params (mặc định là trang 1 và 9 sản phẩm mỗi trang)
-    page = int(request.GET.get('page', 1))
-    page_size = int(request.GET.get('page_size', 9))
-
-    # Tính toán chỉ số bắt đầu và kết thúc cho trang hiện tại
-    start_index = (page - 1) * page_size
-    end_index = start_index + page_size
-
-    # Lấy ra sản phẩm cho trang hiện tại
-    paginated_products = products[start_index:end_index]
-
-    # Định dạng lại giá cho các sản phẩm trong trang hiện tại
-    for product in paginated_products:
-        product['price'] = format_currency(product['price'])
-
-    # Trả về dữ liệu cùng với tổng số trang
-    total_pages = (len(products) + page_size - 1) // page_size  # Tính tổng số trang
-    data = {
-        'products': paginated_products,
-        'total_pages': total_pages,
-        'current_page': page,
-    }
-
-    return JsonResponse(data)
-
 
 def product_detail(request, product_id):
     # Fetch product details from API
@@ -205,3 +149,14 @@ def product_detail(request, product_id):
     }
 
     return render(request, 'productDetail.html', context)
+
+def test(request):
+    url = "https://techshop-backend-c7hy.onrender.com/api/getAllProducts"
+    response = requests.get(url)
+    
+    if response.status_code == 200:
+        products = response.json()
+        
+    else:
+        products=[]
+    return render(request, 'components/productList1.html', {'products': products})
