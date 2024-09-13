@@ -2,65 +2,75 @@
 
 <header id="header">
     <div id="header-wrap">
-      <nav class="secondary-nav border-bottom">
-        <div class="container">
-          <div class="row d-flex align-items-center">
-            <div class="col-md-4 header-contact">
-              alo
-            </div>
-            <div class="col-md-4 shipping-purchase text-center">
-            </div>
-            <div class="col-md-4 col-sm-12 user-items">
-              <ul class="d-flex justify-content-end list-unstyled align-items-center">
-                <li>
-                  <a href="/login">
-                    <i class="icon icon-user" style="font-size: 24px;"></i>
-                  </a>
-                </li>
-                <li>
-                  <a href="/cart">
-                    <i class="icon icon-shopping-cart" style="font-size: 24px;"></i>
-                  </a>
-                </li>
-                <li class="user-items search-item pe-3">
-                  <a href="#" class="search-button" style="font-size: 24px;">
-                    <i class="icon icon-search"></i>
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </nav>
-      <nav class="primary-nav p-1">
-        <div class="container">
-          <div class="row d-flex align-items-center">
-            <div class="col-lg-2 col-md-2">
-              <div class="main-logo">
-                <a href="/">
-                  <img src="{% static 'image/logo-chan.png' %}" alt="logo" width="120px" height="120px">
-                </a>
-              </div>
-            </div>
-            <div class="col-lg-10 col-md-10">
-              <div class="navbar">
-
-                <div id="main-nav" class="stellarnav d-flex justify-content-end right">
-                  <ul class="menu-list">
-
-                    <li class="menu-item">
-                      <a href="/" class="item-anchor active d-flex align-item-center" data-effect="Home">Home</a>
-                    </li>
-                    <li><a href="about.html" class="item-anchor" data-effect="About">About</a></li>
-                    <li><a href="contact.html" class="item-anchor" data-effect="Contact">Contact</a></li>
-
-                  </ul>
+        <nav class="secondary-nav border-bottom">
+            <div class="container">
+                <div class="row d-flex align-items-center">
+                    <div class="col-md-4 header-contact">
+                        {% if request.session.user %}
+                            Hi, {{ request.session.user.name }}!
+                        {% endif %}
+                    </div>
+                    <div class="col-md-4 shipping-purchase text-center">
+                    </div>
+                    <div class="col-md-4 col-sm-12 user-items">
+                        <ul class="d-flex justify-content-end list-unstyled align-items-center gap-2">
+                            <li>
+                                <a href="/cart">
+                                    <i class="icon icon-shopping-cart" style="font-size: 24px;"></i>
+                                </a>
+                            </li>
+                            <li class="user-items search-item pe-3">
+                                <a href="#" class="search-button" style="font-size: 24px;">
+                                    <i class="icon icon-search"></i>
+                                </a>
+                            </li>
+                            <li class="dropdown">
+                              {% if request.session.user %}
+                                  <a class="dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                      <i class="icon icon-user" style="font-size: 24px;"></i>
+                                  </a>
+                                  <ul class="dropdown-menu bg-white" aria-labelledby="userDropdown" style="z-index: 9999; position: absolute;">
+                                      <li><a class="dropdown-item" href="/profile">Profile</a></li>
+                                      <li><a class="dropdown-item" href="/logout">Logout</a></li>
+                                  </ul>
+                              {% else %}
+                                  <a href="/login">
+                                      <i class="icon icon-user" style="font-size: 24px;"></i>
+                                  </a>
+                              {% endif %}
+                          </li>
+                        </ul>
+                    </div>
                 </div>
-
-              </div>
             </div>
-          </div>
-        </div>
-      </nav>
+        </nav>
+        <nav class="primary-nav">
+            <div class="container">
+                <div class="row d-sm-flex d-none align-items-center">
+                    <div class="col-lg-2 col-md-2">
+                        <div class="main-logo d-sm-block d-none">
+                            <a href="/">
+                                <img src="{% static 'image/logo-chan.png' %}" alt="logo" width="120px" height="120px">
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-lg-10 col-md-10">
+                        <div class="navbar">
+                            <div id="main-nav" class="stellarnav d-flex justify-content-end right">
+                                <ul class="menu-list">
+                                    <li class="menu-item">
+                                        <a href="/" class="item-anchor active d-flex align-item-center" data-effect="Home">Home</a>
+                                    </li>
+                                    <li><a href="about.html" class="item-anchor" data-effect="About">About</a></li>
+                                    <li><a href="contact.html" class="item-anchor" data-effect="Contact">Contact</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
     </div>
-  </header>
+</header>
+
+

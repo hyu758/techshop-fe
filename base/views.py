@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.contrib import messages
 import random
+from django.views.decorators.csrf import csrf_exempt
 
 def format_currency(value):
     if isinstance(value, str):
@@ -11,25 +12,47 @@ def format_currency(value):
     
     return "{:,.0f}".format(float(value))
 
+
+import json
+from django.shortcuts import redirect, render
+from django.http import JsonResponse
+import requests
+
 def login(request):
     if request.method == 'POST':
-        email = request.POST.get('email')
-        password = request.POST.get('password')
+        try:
+            data = json.loads(request.body)
+            email = data.get('email')
+            password = data.get('password')
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'Invalid JSON'}, status=400)
+
         print("Email:", email)
         print("Password:", password)
-        # Gửi yêu cầu đến API Node.js
-        api_url = 'http://localhost:3000/api/login'  # Thay đổi URL nếu cần
+        
+        api_url = 'https://techshop-backend-c7hy.onrender.com/api/login'  # Đảm bảo URL chính xác
         response = requests.post(api_url, json={'email': email, 'password': password})
 
         if response.status_code == 200:
-            # Xử lý khi đăng nhập thành công
             data = response.json()
-            return JsonResponse(data)
+            user_data = data.get('user', {})
+            request.session['user'] = {
+                'id': user_data.get('id'),
+                'email': user_data.get('email'),
+                'name': user_data.get('name')
+            }
+            return JsonResponse({'message': 'Đăng nhập thành công'}, status=200)
         else:
-            # Xử lý khi có lỗi
-            return JsonResponse({'error': 'Invalid credentials'}, status=401)
+            return JsonResponse({'error': 'Thông tin đăng nhập không chính xác'}, status=401)
 
     return render(request, 'components/login.html')
+
+
+def logout(request):
+    # Xóa thông tin người dùng khỏi session
+    if 'user' in request.session:
+        del request.session['user']
+    return redirect('/')
 
 def register(request):
     if request.method == 'POST':
@@ -150,13 +173,43 @@ def product_detail(request, product_id):
 
     return render(request, 'productDetail.html', context)
 
-def test(request):
-    url = "https://techshop-backend-c7hy.onrender.com/api/getAllProducts"
-    response = requests.get(url)
-    
-    if response.status_code == 200:
-        products = response.json()
-        
-    else:
-        products=[]
-    return render(request, 'components/productList1.html', {'products': products})
+def profile(request):
+    if request.method == 'POST':
+        user_id = request.session.get('user', {}).get('id')
+        if not user_id:
+            return redirect('/login')
+
+        name = request.POST.get('name')
+        address = request.POST.get('address')
+        phone_number = request.POST.get('phone_number')
+
+        api_url = f'https://techshop-backend-c7hy.onrender.com/api/updateUser/{user_id}'
+        response = requests.put(api_url, json={
+            'name': name,
+            'address': address,
+            'phone_number': phone_number
+        })
+
+        if response.status_code == 200:
+            return JsonResponse({'message': 'Cập nhật thành công'})
+        else:
+            return JsonResponse({'error': 'Cập nhật thất bại'}, status=400)
+
+    # Hiển thị trang profile
+    user_id = request.session.get('user', {}).get('id')
+    if not user_id:
+        return redirect('/login')
+
+    api_url = f'http://localhost:3000/api/getUserById/{user_id}'
+    try:
+        response = requests.get(api_url)
+        response.raise_for_status()  # Kiểm tra mã trạng thái HTTP
+        user_data = response.json()  # Phân tích dữ liệu JSON
+    except requests.exceptions.HTTPError as http_err:
+        return JsonResponse({'error': f'HTTP error occurred: {http_err}'}, status=500)
+    except requests.exceptions.RequestException as req_err:
+        return JsonResponse({'error': f'Request error occurred: {req_err}'}, status=500)
+    except ValueError as json_err:
+        return JsonResponse({'error': f'JSON decoding error: {json_err}'}, status=500)
+
+    return render(request, 'userProfile.html', {'user': user_data})
