@@ -130,3 +130,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 
 STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
+
+# Thời gian hết hạn của session (tính bằng giây)
+SESSION_COOKIE_AGE = 1800  # 30 phút
+
+# Thời gian hết hạn của session không hoạt động (tính bằng giây)
+SESSION_SAVE_EVERY_REQUEST = True  # Cập nhật thời gian hết hạn mỗi khi có yêu cầu mới
+
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True

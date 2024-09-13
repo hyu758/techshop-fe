@@ -173,43 +173,80 @@ def product_detail(request, product_id):
 
     return render(request, 'productDetail.html', context)
 
+
 def profile(request):
     if request.method == 'POST':
         user_id = request.session.get('user', {}).get('id')
         if not user_id:
-            return redirect('/login')
+            return JsonResponse({'error': 'User not logged in'}, status=401)
 
+        # Lấy dữ liệu từ form
         name = request.POST.get('name')
-        address = request.POST.get('address')
         phone_number = request.POST.get('phone_number')
+        address = request.POST.get('address')
 
-        api_url = f'https://techshop-backend-c7hy.onrender.com/api/updateUser/{user_id}'
-        response = requests.put(api_url, json={
+        # Tạo payload cho API
+        data = {
             'name': name,
+            'phone_number': phone_number,
             'address': address,
-            'phone_number': phone_number
-        })
+        }
+        print(data)
+        api_url = f'https://techshop-backend-c7hy.onrender.com/api/updateUser/{user_id}'
 
-        if response.status_code == 200:
-            return JsonResponse({'message': 'Cập nhật thành công'})
-        else:
-            return JsonResponse({'error': 'Cập nhật thất bại'}, status=400)
+        # Gửi yêu cầu đến API backend để cập nhật thông tin người dùng
+        try:
+            response = requests.put(api_url, json=data)
 
-    # Hiển thị trang profile
+            if response.status_code == 200:
+                return JsonResponse({'message': 'Profile updated successfully'})
+            else:
+                return JsonResponse({'error': 'Failed to update profile'}, status=400)
+        except requests.exceptions.RequestException as e:
+            return JsonResponse({'error': str(e)}, status=500)
+
+    # Hiển thị thông tin user trong trang profile
     user_id = request.session.get('user', {}).get('id')
     if not user_id:
         return redirect('/login')
 
-    api_url = f'http://localhost:3000/api/getUserById/{user_id}'
+    api_url = f'https://techshop-backend-c7hy.onrender.com/api/getUserById/{user_id}'
     try:
         response = requests.get(api_url)
-        response.raise_for_status()  # Kiểm tra mã trạng thái HTTP
-        user_data = response.json()  # Phân tích dữ liệu JSON
-    except requests.exceptions.HTTPError as http_err:
-        return JsonResponse({'error': f'HTTP error occurred: {http_err}'}, status=500)
+        response.raise_for_status()
+        user_data = response.json()
+        print(user_data)
     except requests.exceptions.RequestException as req_err:
         return JsonResponse({'error': f'Request error occurred: {req_err}'}, status=500)
-    except ValueError as json_err:
-        return JsonResponse({'error': f'JSON decoding error: {json_err}'}, status=500)
 
     return render(request, 'userProfile.html', {'user': user_data})
+
+
+def upload_image(request):
+    if request.method == 'POST':
+        user_id = request.session.get('user', {}).get('id')
+        if not user_id:
+            return JsonResponse({'error': 'User not logged in'}, status=401)
+
+        avatar = request.FILES.get('img')
+        if avatar:
+            # Tạo đối tượng FormData để gửi dữ liệu
+            files = {'img': avatar}
+            data = {'user_id': user_id}  # Thêm user_id vào dữ liệu gửi đi
+            
+            api_url = 'https://techshop-backend-c7hy.onrender.com/uploadImage'  # Đảm bảo URL chính xác
+
+            try:
+                response = requests.post(api_url, files=files, data=data)  # Gửi cả files và data
+                if response.status_code == 200:
+                    result = response.json()
+                    return JsonResponse({'message': 'Avatar updated successfully', 'img_link': result['img_link']})
+                else:
+                    return JsonResponse({'error': 'Failed to update avatar'}, status=400)
+
+            except requests.exceptions.RequestException as e:
+                return JsonResponse({'error': str(e)}, status=500)
+        else:
+            return JsonResponse({'error': 'No avatar provided'}, status=400)
+
+    return redirect('/profile')

@@ -4,7 +4,7 @@
 {% endblock %}
 {% block content %}
   {% include 'partials/header.html' %}
-  <section style="background-color: #f8fafc; ">
+  <section style="background-color: #f8fafc;">
     <div class="container">
       <div class="row pt-3">
         <div class="col">
@@ -23,37 +23,40 @@
           <div class="col-lg-4">
             <div class="card mb-4">
               <div class="card-body text-center">
-                <img src="" alt="avatar" class="rounded-circle img-fluid" style="width: 150px;" />
-                <h5 class="my-3">{{ user.name }}</h5>
-                <p class="text-muted mb-1">{{ user.address }}</p>
-                <div class="d-flex justify-content-center mb-2">
-                  <button type="button" class="btn btn-outline-primary ms-1">Message</button>
-                </div>
-              </div>
-            </div>
-            <div class="card mb-4 mb-lg-0">
-              <div class="card-body p-0">
-                <ul class="list-group list-group-flush rounded-3">
-                  <!-- Các mục này có thể được cập nhật tùy thuộc vào yêu cầu -->
-                  <li class="list-group-item d-flex justify-content-between align-items-center p-3">
-                    <i class="fas fa-globe fa-lg text-warning"></i>
-                    <p class="mb-0">{{ user.website }}</p>
-                  </li>
-                  <!-- Thêm các mục khác nếu cần -->
-                </ul>
+                <!-- Form cập nhật hình ảnh -->
+                <form id="imageUploadForm" method="POST" enctype="multipart/form-data" action="{% url 'upload_image' %}">
+                  {% csrf_token %}
+                  <!-- Phần hình ảnh -->
+                  <div class="d-flex align-items-center justify-content-center mb-4">
+                    {% if user.avatar_url %}
+                      <img src="{{ user.avatar_url }}" alt="avatar" class="rounded-circle img-fluid" style="width: 150px;" id="avatar-preview" />
+                    {% else %}
+                      <img src="https://cdn.discordapp.com/attachments/1184857907049807977/1284097928163627019/avatar-default.jpg?ex=66e564e3&is=66e41363&hm=5e68100178addc90a737cd7c74331b11d1ee8cb0b74a2562be66d79ec73851b9&" alt="avatar" class="rounded-circle img-fluid" style="width: 150px;" id="avatar-preview" />
+                    {% endif %}
+                  </div>
+                  <!-- Phần nút và input -->
+                  <div class="d-flex flex-column align-items-center">
+                    <label for="avatar" class="btn btn-outline-primary mb-2">Upload</label>
+                    <input type="file" id="avatar" name="img" accept="image/*" style="display: none;" />
+                    <button type="submit" class="btn btn-primary">Set avatar</button>
+                  </div>
+                </form>
               </div>
             </div>
           </div>
+
           <div class="col-lg-8">
             <div class="card mb-4">
               <div class="card-body">
-                <form id="profileForm">
+                <!-- Form cập nhật thông tin -->
+                <form id="profileForm" method="POST" action="{% url 'profile' %}">
+                  {% csrf_token %}
                   <div class="row align-items-center py-4">
                     <div class="col-sm-3">
                       <p class="mb-0">Full Name</p>
                     </div>
                     <div class="col-sm-9">
-                      <input type="text" class="form-control" id="name" value="{{ user.name }}" />
+                      <input type="text" class="form-control" name="name" id="name" value="{{ user.name }}" />
                     </div>
                   </div>
                   <hr />
@@ -62,7 +65,7 @@
                       <p class="mb-0">Phone</p>
                     </div>
                     <div class="col-sm-9">
-                      <input type="text" class="form-control" id="phone_number" value="{{ user.phone_number }}" />
+                      <input type="text" class="form-control" name="phone_number" id="phone_number" value="{{ user.phone_number }}" />
                     </div>
                   </div>
                   <hr />
@@ -71,7 +74,7 @@
                       <p class="mb-0">Address</p>
                     </div>
                     <div class="col-sm-9">
-                      <input type="text" class="form-control" id="address" value="{{ user.address }}" />
+                      <input type="text" class="form-control" name="address" id="address" value="{{ user.address }}" />
                     </div>
                   </div>
                   <hr />
@@ -89,38 +92,75 @@
   {% include 'partials/footer.html' %}
 
   <script>
-    document.getElementById('profileForm').addEventListener('submit', async function (event) {
-      event.preventDefault()
-    
-      const id = '{{ user.id }}' // Lấy ID người dùng từ Django context
-      const name = document.getElementById('name').value
-      const phone_number = document.getElementById('phone_number').value
-      const address = document.getElementById('address').value
-    
-      try {
-        const response = await fetch(`https://techshop-backend-c7hy.onrender.com/api/updateUser/${id}`, {
+    const showAlert = (message, type) => {
+      Swal.fire({
+        icon: type,
+        title: message,
+        showConfirmButton: true,
+        timer: 3000
+      });
+    };
+
+    document.getElementById('imageUploadForm').addEventListener('submit', function (event) {
+      event.preventDefault(); // Ngăn chặn hành động gửi form mặc định
+  
+      const formData = new FormData(this);
+  
+      fetch("{% url 'upload_image' %}", {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json'
+              'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
           },
-          body: JSON.stringify({
-            name,
-            phone_number,
-            address
-          })
-        })
-    
-        if (response.ok) {
-          const result = await response.json()
-          alert('Profile updated successfully')
-          // Optionally, bạn có thể cập nhật thông tin trên giao diện ngay lập tức
-        } else {
-          const error = await response.json()
-          alert(`Error: ${error.message}`)
-        }
-      } catch (error) {
-        alert(`Error: ${error.message}`)
-      }
-    })
+          body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+          if (data.message) {
+              // Cập nhật hình ảnh trên trang
+              document.getElementById('avatar-preview').src = data.img_link;
+              showAlert(data.message, 'success');
+          } else if (data.error) {
+              showAlert(data.error, 'error');
+          }
+      })
+      .catch(error => {
+          console.error('Error:', error);
+          showAlert('An error occurred', 'error');
+      });
+    });
+
+    // Xử lý thông báo cập nhật thông tin người dùng
+    document.getElementById('profileForm').addEventListener('submit', function (event) {
+      event.preventDefault(); // Ngăn chặn hành động gửi form mặc định
+  
+      const formData = new FormData(this);
+  
+      fetch("{% url 'profile' %}", {
+          method: 'POST',
+          headers: {
+              'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+          },
+          body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+          if (data.message) {
+              showAlert(data.message, 'success');
+          } else if (data.error) {
+              showAlert(data.error, 'error');
+          }
+      })
+      .catch(error => {
+          console.error('Error:', error);
+          showAlert('An error occurred', 'error');
+      });
+    });
+
+    // Hiển thị thông báo nếu có
+    {% if message %}
+      showAlert('{{ message }}', 'success');
+    {% elif error %}
+      showAlert('{{ error }}', 'error');
+    {% endif %}
   </script>
 {% endblock %}
