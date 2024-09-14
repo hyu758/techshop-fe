@@ -2591,7 +2591,7 @@ a.blog-categories:hover{
 /* ------ Sidebar ------*/
 .shopify-grid .sidebar .widgets,
 .post-grid .sidebar .widgets{
-    margin-bottom: 40px;
+    margin-bottom: 32px;
 }
 .shopify-grid input[type="text"], 
 .post-grid input[type="text"] {
@@ -3042,4 +3042,12 @@ section.categories .category-content a{
 
 .fontVN{
   font-family: "Inter", sans-serif;
+}
+.search-result-title {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
 }

@@ -65,9 +65,10 @@
                       <p class="mb-0">Phone</p>
                     </div>
                     <div class="col-sm-9">
-                      <input type="text" class="form-control" name="phone_number" id="phone_number" value="{{ user.phone_number }}" />
+                      <input type="text" class="form-control" name="phone_number" id="phone_number" value="{{ user.phone_number }}" pattern="[0-9]{10,15}" title="Số điện thoại phải từ 10 đến 15 chữ số" />
+                      <small id="phone-error" class="text-danger" style="display: none;">Số điện thoại không hợp lệ. Vui lòng nhập từ 10 đến 15 chữ số.</small>
                     </div>
-                  </div>
+                  </div>                  
                   <hr />
                   <div class="row align-items-center py-4">
                     <div class="col-sm-3">
@@ -155,6 +156,46 @@
           showAlert('An error occurred', 'error');
       });
     });
+    document.getElementById('profileForm').addEventListener('submit', function (event) {
+      const phoneInput = document.getElementById('phone_number');
+      const phoneError = document.getElementById('phone-error');
+      
+      // Kiểm tra định dạng số điện thoại
+      const phonePattern = /^[0-9]{10,15}$/; // Chỉ cho phép từ 10 đến 15 chữ số
+      if (!phonePattern.test(phoneInput.value)) {
+        phoneError.style.display = 'block'; // Hiển thị thông báo lỗi
+        event.preventDefault(); // Ngăn chặn gửi form
+        return;
+      } else {
+        phoneError.style.display = 'none'; // Ẩn thông báo lỗi nếu hợp lệ
+      }
+      
+      // Ngăn chặn hành động gửi form mặc định và gửi dữ liệu qua fetch API
+      event.preventDefault();
+      
+      const formData = new FormData(this);
+      
+      fetch("{% url 'profile' %}", {
+          method: 'POST',
+          headers: {
+              'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+          },
+          body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+          if (data.message) {
+              showAlert(data.message, 'success');
+          } else if (data.error) {
+              showAlert(data.error, 'error');
+          }
+      })
+      .catch(error => {
+          console.error('Error:', error);
+          showAlert('An error occurred', 'error');
+      });
+    });
+    
 
     // Hiển thị thông báo nếu có
     {% if message %}

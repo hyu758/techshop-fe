@@ -2,18 +2,28 @@
 {% block title %} Shopping page {% endblock %}
 {% block content %}
     {% include "partials/header.html" %}
+
+    <div>
+    <div class="container">
+      <div class="row pt-3">
+        <div class="col">
+          <nav aria-label="breadcrumb" class="rounded-3 p-3">
+            <ol class="breadcrumb mb-0">
+              <li class="breadcrumb-item">
+                <a href="/">Home</a>
+              </li>
+              <li class="breadcrumb-item active" aria-current="page">Shop</li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+    </div>
     <!-- main content -->
     <section class="site-banner jarallax min-height300 padding-large" style="background: url(images/hero-image.jpg) no-repeat; background-position: top;">
-        <div class="container">
+      <div class="container">
           <div class="row">
             <div class="col-md-12">
               <h1 class="page-title">Shop page</h1>
-              <div class="breadcrumbs">
-                <span class="item">
-                  <a href="/">Home/</a>
-                </span>
-                <span class="item">Shop</span>
-              </div>
             </div>
           </div>
         </div>
@@ -21,5 +31,6 @@
     
     {% include "components/allProducts.html" %}
     {% include "partials/footer.html" %}
+    
 
 {% endblock %}

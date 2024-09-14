@@ -40,14 +40,17 @@
         <div class="sidebar">
           <div class="widgets widget-menu">
             <div class="widget-search-bar">
-              <form role="search" method="get" class="d-flex">
-                <input class="search-field" placeholder="Search" type="text" style="height: 50px;">
-                <button class="btn btn-dark rounded-0 rounded-end"><i class="icon icon-search"></i></button>
+              <form role="search" method="get" class="d-flex" id = "search-form">
+                <input class="search-field" placeholder="Search" type="text" style="height: 50px;" id="search-input">
+                <button class="btn btn-dark rounded-0 rounded-end" type="submit"><i class="icon icon-search"></i></button>
               </form>
+              <div id="search-results-panel" class="search-panel d-none overflow-auto position-absolute bg-white" style="max-height: 548px; z-index: 9999;">
+                <!-- Kết quả tìm kiếm sẽ được thêm vào đây -->
+            </div>
             </div>
           </div>
         </div>
-        <div class="d-flex justify-content-center gap-5">
+        <div class="d-flex justify-content-center border-1 gap-5 p-4 rounded-1">
           <div class="widgets widget-product-brands ps-4">
             <h5 class="widget-title">Brands</h5>
             <ul class="product-tags sidebar-list list-unstyled">
@@ -96,6 +99,9 @@
               <button id="apply-price-filter" class="btn btn-secondary">Áp dụng</button>
             </div>
           </div>
+        </div>
+        <div class="d-flex justify-content-center mt-2">
+          <button id="reset-filters" class="btn btn-primary bg-primary">Reset Filters</button>
         </div>
       </aside>
     </div>

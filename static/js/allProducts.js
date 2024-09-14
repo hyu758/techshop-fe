@@ -7,44 +7,53 @@ let products = [];
 const productsData = JSON.parse(document.getElementById('products-data').textContent);
 products = productsData;
 
-// Khi trang được tải, lấy dữ liệu sản phẩm từ thẻ script và lưu vào biến toàn cục
 document.addEventListener('DOMContentLoaded', function () {
+    const resetFiltersButton = document.getElementById('reset-filters');
+    const searchForm = document.getElementById('search-form');
+    const searchInput = document.getElementById('search-input');
+    const searchResultsPanel = document.getElementById('search-results-panel');
     const preloader = document.querySelector('.spinner-wrapper');
     const paginationContainer = document.querySelector('.pagination.loop-pagination');
     const productList = document.querySelector('#product-list');
     const priceFilters = document.querySelectorAll('.widget-price-filter a');
     const brandFilters = document.querySelectorAll('.widget-product-brands .tags-item a');
+    const applyPriceFilterButton = document.getElementById('apply-price-filter');
+    
+    let products = JSON.parse(document.getElementById('products-data').textContent);
     let currentPage = 1;
     const pageSize = 9; // Số sản phẩm trên mỗi trang
     let currentPriceRange = '';
-    let currentCategoryId = '0'; // Thay đổi nếu cần
-    let currentBrand = ''; // Thay đổi theo thương hiệu
+    let currentCategoryId = '0';
+    let currentBrand = '';
+    let searchQuery = '';
+
+    function parsePrice(priceString) {
+        return parseFloat(priceString.replace(/,/g, ''));
+    }
 
     function applyFilters() {
         console.log('Products:', products);
         console.log('Current Price Range:', currentPriceRange);
         console.log('Current Brand:', currentBrand);
         console.log('Current Category ID:', currentCategoryId);
+        console.log('Search Query:', searchQuery);
 
-        // Lọc sản phẩm dựa trên các tiêu chí
+        const [minPrice, maxPrice] = currentPriceRange.split('-').map(Number);
         const filteredProducts = products.filter(product => {
-            const [minPrice, maxPrice] = currentPriceRange.split('-').map(Number);
-            const inPriceRange = parsePrice(product.price) >= (parseInt(minPrice) || 0) && parsePrice(product.price) <= (parseInt(maxPrice) || Infinity);
+            const price = parsePrice(product.price);
+            const inPriceRange = price >= (minPrice || 0) && price <= (maxPrice || Infinity);
             const inBrand = currentBrand ? product.brand === currentBrand : true;
             const inCategory = currentCategoryId === '0' || product.category_id === parseInt(currentCategoryId, 10);
+            const matchesSearchQuery = product.name.toLowerCase().includes(searchQuery.toLowerCase().trim());
 
-            return inPriceRange && inBrand && inCategory;
+            return inPriceRange && inBrand && inCategory && matchesSearchQuery;
         });
 
-        // Xác định số lượng trang
         const totalPages = Math.ceil(filteredProducts.length / pageSize);
         const startIndex = (currentPage - 1) * pageSize;
         const endIndex = currentPage * pageSize;
-
-        // Chỉ lấy sản phẩm trong khoảng trang hiện tại
         const productsToDisplay = filteredProducts.slice(startIndex, endIndex);
 
-        // Xây dựng HTML cho sản phẩm
         let productHTML = '';
         productsToDisplay.forEach(product => {
             let rating = getRating(product.rating);
@@ -52,7 +61,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 <div class="product-item col-lg-4 col-md-6 col-sm-6" style="margin-bottom: 80px !important" data-category-id="${product.category_id}">
                   <div class="image-holder">
                     <a href="/product/${product.id}/">
-                      <img src="${product.image_url}" alt="${product.name}" class="product-image">
+                      <img src="${product.image_url}" alt="${product.name}" class="product-image ">
                     </a>
                   </div>
                   <div class="cart-concern border-1">
@@ -80,23 +89,18 @@ document.addEventListener('DOMContentLoaded', function () {
                     <div class="item-price text-danger fs-4 fw-semibold">${product.price}₫</div>
                   </div>
                 </div>
-              `;
+            `;
         });
 
-        // Cập nhật nội dung danh sách sản phẩm
         productList.innerHTML = productHTML;
-
-        // Hiển thị/ẩn loader
         preloader.classList.add('d-none');
         preloader.classList.remove('d-block');
-
-        // Cập nhật phân trang
         renderPagination(totalPages);
     }
 
     function renderPagination(totalPages) {
         paginationContainer.innerHTML = '';
-    
+
         for (let page = 1; page <= totalPages; page++) {
             const pageButton = document.createElement('a');
             pageButton.classList.add('page-numbers');
@@ -104,16 +108,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 pageButton.classList.add('current');
             }
             pageButton.textContent = page;
-    
             pageButton.addEventListener('click', function () {
                 currentPage = page;
-                applyFilters(); // Gọi applyFilters để cập nhật sản phẩm trên trang
+                applyFilters();
             });
-    
             paginationContainer.appendChild(pageButton);
         }
-    
-        // Thêm các nút 'Previous' và 'Next'
+
         if (currentPage > 1) {
             const prevButton = document.createElement('a');
             prevButton.classList.add('pagination-arrow', 'd-flex', 'align-items-center');
@@ -124,7 +125,7 @@ document.addEventListener('DOMContentLoaded', function () {
             });
             paginationContainer.prepend(prevButton);
         }
-    
+
         if (currentPage < totalPages) {
             const nextButton = document.createElement('a');
             nextButton.classList.add('pagination-arrow', 'd-flex', 'align-items-center');
@@ -136,8 +137,89 @@ document.addEventListener('DOMContentLoaded', function () {
             paginationContainer.appendChild(nextButton);
         }
     }
-    
-    // Xử lý sự kiện click cho các tab lọc sản phẩm
+
+    function displaySearchResults(results) {
+        searchResultsPanel.innerHTML = '';
+        if (results.length > 0) {
+            results.forEach(result => {
+                const resultItem = document.createElement('div');
+                resultItem.classList.add('search-result-item');
+                resultItem.innerHTML = `
+                <div class="card mb-3" style="max-width: 540px;">
+                  <div class="row g-0">
+                    <div class="col-md-4 image-holder d-flex align-items-center justify-content-center px-2">
+                        <a href="/product/${result.id}/">
+                            <img src="${result.image_url}" alt="${result.name}" class="product-image">
+                        </a>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <div class="search-result-details">
+                                <a href="/product/${result.id}/" class="search-result-title">${result.name}</a>
+                                <div class="d-flex align-items-center gap-1">
+                                    <div class="d-flex rating">${getRating(result.rating)}</div>
+                                    <div class="text-secondary">Đã bán: ${result.sold_quantity}</div>
+                                </div>
+                                <div class="text-danger">${result.price}₫</div>
+                            </div>
+                        </div>
+                    </div>
+                  </div>
+                </div>
+                
+            
+                `;
+                searchResultsPanel.appendChild(resultItem);
+            });
+        } else {
+            searchResultsPanel.innerHTML = '<p>Không có kết quả tìm kiếm</p>';
+        }
+    }
+
+    function onSearch(searchTerm) {
+        return new Promise((resolve) => {
+            const filteredProducts = products.filter(product => product.name.toLowerCase().includes(searchTerm.toLowerCase()));
+            resolve(filteredProducts.map(product => ({
+                id: product.id,
+                name: product.name,
+                image_url: product.image_url,
+                rating: product.rating,
+                sold_quantity: product.sold_quantity,
+                price: product.price
+            })));
+        });
+    }
+
+    searchInput.addEventListener('input', function (event) {
+        searchQuery = event.target.value;
+        if (searchQuery) {
+            onSearch(searchQuery).then(results => {
+                displaySearchResults(results);
+                searchResultsPanel.classList.remove('d-none');
+            });
+        } else {
+            searchResultsPanel.classList.add('d-none');
+        }
+    });
+
+    searchForm.addEventListener('submit', function (event) {
+        event.preventDefault();
+        searchQuery = searchInput.value;
+        if (searchQuery) {
+            applyFilters()
+            onSearch(searchQuery).then(results => {
+                displaySearchResults(results);
+                searchResultsPanel.classList.remove('d-none');
+            });
+        }
+    });
+
+    document.addEventListener('click', function (event) {
+        if (!searchResultsPanel.contains(event.target) && !searchForm.contains(event.target)) {
+            searchResultsPanel.classList.add('d-none');
+        }
+    });
+
     const tabs = document.querySelectorAll('.tabs .tab');
     tabs.forEach(tab => {
         tab.addEventListener('click', function () {
@@ -151,20 +233,18 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // Xử lý sự kiện click cho các bộ lọc giá
     priceFilters.forEach(filter => {
         filter.addEventListener('click', function (event) {
             event.preventDefault();
-            // Lấy khoảng giá từ thuộc tính data-price-filter
             let priceRange = this.getAttribute('data-price-filter');
-            // Tách giá từ khoảng giá
             let [min, max] = priceRange.split('-').map(Number);
 
-            // Cập nhật khoảng giá
-            currentPriceRange = `${min * 1000000}-${max * 1000000}`;
+            min*= 1000000
+            max*= 1000000
+
+            currentPriceRange = `${min}-${max}`;
             console.log("currentPriceRange", currentPriceRange);
 
-            // Đánh dấu filter giá hiện tại
             priceFilters.forEach(pf => pf.classList.remove('active'));
             this.classList.add('active');
             currentPage = 1;
@@ -172,81 +252,57 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // Xử lý sự kiện click cho nút áp dụng khoảng giá
-    document.getElementById('apply-price-filter').addEventListener('click', function () {
+    applyPriceFilterButton.addEventListener('click', function () {
         const minPrice = parseFloat(document.getElementById('price-min').value) || 0;
-        const maxPrice = parseFloat(document.getElementById('price-max').value) || 999999999; // Giá tối đa lớn hơn bất kỳ giá sản phẩm nào
+        const maxPrice = parseFloat(document.getElementById('price-max').value) || Infinity;
 
-        // Cập nhật khoảng giá
         currentPriceRange = `${minPrice}-${maxPrice}`;
         console.log("currentPriceRange", currentPriceRange);
 
-        // Đánh dấu filter giá hiện tại
         priceFilters.forEach(pf => pf.classList.remove('active'));
         currentPage = 1;
         applyFilters();
     });
 
-    // Xử lý sự kiện click cho các bộ lọc thương hiệu
     brandFilters.forEach(filter => {
         filter.addEventListener('click', function (event) {
             event.preventDefault();
-            // Lấy brand từ thuộc tính href
             const brand = this.textContent.trim();
 
-            // Cập nhật brand hiện tại
             currentBrand = brand;
 
-            // Đánh dấu filter thương hiệu hiện tại
             brandFilters.forEach(bf => bf.classList.remove('active'));
             this.classList.add('active');
 
-            // Cập nhật các sản phẩm và phân trang
             currentPage = 1;
             applyFilters();
         });
     });
+    function resetFilters() {
+        // Reset price filters
+        priceFilters.forEach(pf => pf.classList.remove('active'));
 
-    // Xử lý phân trang
-    function updatePagination() {
-        // Lấy số lượng sản phẩm hiện tại
-        const productsData = JSON.parse(document.getElementById('products-data').textContent);
-        const filteredProducts = productsData.filter(product => {
-            // Áp dụng các bộ lọc hiện tại
-            const minPrice = parseFloat(currentPriceRange.split('-')[0]) || 0;
-            const maxPrice = parseFloat(currentPriceRange.split('-')[1]) || Infinity;
-            const inPriceRange = product.price >= minPrice && product.price <= maxPrice;
+        document.getElementById('price-min').value = ''
+        document.getElementById('price-max').value = ''
 
-            const inBrand = currentBrand ? product.brand === currentBrand : true;
-            const inCategory = currentCategoryId === '0' || product.category_id === currentCategoryId;
+        // Reset brand filters
+        brandFilters.forEach(bf => bf.classList.remove('active'));
 
-            return inPriceRange && inBrand && inCategory;
-        });
+        // Reset other filters
+        currentPriceRange = '';
+        currentBrand = '';
+        currentCategoryId = '0';
+        currentPage = 1;
 
-        // Tính số trang dựa trên số lượng sản phẩm và kích thước trang
-        const totalPages = Math.ceil(filteredProducts.length / pageSize);
+        console.log("ngu")
 
-        // Cập nhật nội dung phân trang
-        const paginationContainer = document.querySelector('.pagination.loop-pagination');
-        paginationContainer.innerHTML = '';
-
-        for (let i = 1; i <= totalPages; i++) {
-            const pageButton = document.createElement('a');
-            pageButton.classList.add('page-numbers');
-            if (i === currentPage) {
-                pageButton.classList.add('current');
-            }
-            pageButton.textContent = i;
-
-            pageButton.addEventListener('click', function () {
-                currentPage = i;
-                applyFilters();
-            });
-
-            paginationContainer.appendChild(pageButton);
-        }
+        applyFilters();
     }
 
-    // Lần đầu tiên áp dụng bộ lọc
+    resetFiltersButton.addEventListener('click', function (event) {
+        event.preventDefault();
+        resetFilters();
+    });
+
     applyFilters();
 });
