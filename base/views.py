@@ -173,6 +173,27 @@ def product_detail(request, product_id):
 
     return render(request, 'productDetail.html', context)
 
+@csrf_exempt
+def add_to_cart(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        product_id = data.get('productId')
+        quantity = data.get('quantity')
+
+        # Logic để thêm sản phẩm vào giỏ hàng
+        # Giả sử bạn đang sử dụng session để lưu giỏ hàng
+        cart = request.session.get('cart', {})
+        if product_id in cart:
+            cart[product_id] += quantity
+        else:
+            cart[product_id] = quantity
+
+        request.session['cart'] = cart
+
+        return JsonResponse({'status': 'success'})
+
+    return JsonResponse({'status': 'fail'}, status=400)
+
 
 def profile(request):
     if request.method == 'POST':
@@ -250,3 +271,23 @@ def upload_image(request):
             return JsonResponse({'error': 'No avatar provided'}, status=400)
 
     return redirect('/profile')
+
+
+def cart(request):
+    url = "https://techshop-backend-c7hy.onrender.com/api/orderItem"
+    response = requests.get(url)
+
+
+    context = {
+        
+    }
+    return render(request, 'cart.html', context)
+
+def checkout(request):
+    url = "https://techshop-backend-c7hy.onrender.com/api/orderItem"
+    response = requests.get(url)
+    
+
+    context = {
+    }
+    return render(request, 'checkout.html', context)
