@@ -5,18 +5,13 @@ from django.http import JsonResponse
 from django.contrib import messages
 import random
 from django.views.decorators.csrf import csrf_exempt
+from .orderItemStatus import orderItemStatus
 
 def format_currency(value):
     if isinstance(value, str):
         value = value.replace(',', '')
     
     return "{:,.0f}".format(float(value))
-
-
-import json
-from django.shortcuts import redirect, render
-from django.http import JsonResponse
-import requests
 
 def login(request):
     if request.method == 'POST':
@@ -274,13 +269,41 @@ def upload_image(request):
 
 
 def cart(request):
-    url = "https://techshop-backend-c7hy.onrender.com/api/orderItem"
-    response = requests.get(url)
+    userId = request.session.get('user', {}).get('id')
 
+    print("cart user:", userId)
 
-    context = {
+    if userId is None :
+        return JsonResponse({'error': 'Missing userId '}, status=400)
+
+    # url = f"https://techshop-backend-c7hy.onrender.com/api/getOrderItemByUserAndStatus/{userId}/{status}"
+    url = f"http://localhost:3000/api/getCartByUserId/{userId}"
+    
+    try:
+        response = requests.get(url)
+        response.raise_for_status() 
         
-    }
+        print("cart user try:", userId)
+
+        if response.status_code == 200:
+            data = response.json() 
+            print(data)
+            context = {
+                'cartItem': data  
+            }
+        else:
+            context = {
+                'error': 'Unable to fetch orders at the moment.'
+            }
+    except requests.RequestException as e:
+        # Handle request exceptions
+        context = {
+            'error': f'An error occurred: {str(e)}'  # Display the exception message
+        }
+        
+        print(context)
+
+    # Render the 'cart.html' template with the context
     return render(request, 'cart.html', context)
 
 def checkout(request):
