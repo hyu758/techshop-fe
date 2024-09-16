@@ -19,7 +19,7 @@
               </div>
               <div class="cart-concern border-1">
                 <div class="cart-button d-flex justify-content-between align-items-center">
-                  <button type="button" class="btn-wrap cart-link d-flex align-items-center">add to cart <i class="icon icon-arrow-io"></i></button>
+                  <button type="button" class="btn-wrap cart-link d-flex align-items-center" data-product-id="{{product.id}}">add to cart <i class="icon icon-arrow-io"></i></button>
                   <button type="button" class="view-btn tooltip d-flex">
                     <i class="icon icon-screen-full"></i>
                     <span class="tooltip-text">Quick view</span>
@@ -44,6 +44,8 @@
   </div>
 </section>
 
+{% csrf_token %}
+<meta name="csrf-token" content="{{ csrf_token }}">
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     const fullStar = "{% static 'image/full-star.png' %}";
@@ -80,3 +82,5 @@
     });
   }); 
 </script>
+
+<script src="{% static "js/addToCart.js" %}"></script>

@@ -152,7 +152,7 @@ html {
   box-sizing: border-box;
 }
 body {
-  font-family: var(--body-font);
+  font-family: 'Poppins', sans-serif !important;
   font-size: 18px;
   font-weight: 300;
   line-height: 2;
@@ -247,7 +247,16 @@ img {
 :-ms-input-placeholder {
     color: #7A7A7A;/* Internet Explorer 10+ */
 }
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
 
+/* Ẩn spinner trên Firefox */
+input[type="number"] {
+    -moz-appearance: textfield;
+}
 /* Typography */
 /*----------------------------------------------*/
 
@@ -2977,8 +2986,9 @@ section.categories .category-content a{
   color: white !important;
 }
 
+
 .price-filter{
-  font-family: "Inter", sans-serif;
+  font-family: "Inter", sans-serif ;
 }
 
 .carousel-inner img {

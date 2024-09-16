@@ -108,10 +108,13 @@
   </div>
 </div>
 
-<small class="d-flex rating hidden" style="visibility: hidden;" data-full-star="{% static 'image/full-star.png' %}" data-half-star="{% static 'image/half-star.png' %}" data-empty-star="{% static 'image/empty-star.png' %}">
+<small class="rating hidden" style="visibility: hidden;" data-full-star="{% static 'image/full-star.png' %}" data-half-star="{% static 'image/half-star.png' %}" data-empty-star="{% static 'image/empty-star.png' %}">
 </small>
 
 {{ products|json_script:"products-data" }}
+{% csrf_token %}
+<meta name="csrf-token" content="{{ csrf_token }}">
 
 <script src="{% static "js/starRating.js" %}"></script>
 <script src="{% static "js/allProducts.js" %}"></script>
+<script src="{% static "js/addToCart.js" %}"></script>

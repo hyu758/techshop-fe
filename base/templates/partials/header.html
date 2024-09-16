@@ -14,11 +14,13 @@
                     </div>
                     <div class="col-md-4 col-sm-12 user-items">
                         <ul class="d-flex justify-content-end list-unstyled align-items-center gap-2">
+                            {% if request.session.user %}
                             <li>
                                 <a href="/cart">
                                     <i class="icon icon-shopping-cart" style="font-size: 24px;"></i>
                                 </a>
                             </li>
+                            {% endif %}
                             <li class="user-items search-item pe-3">
                                 <a href="#" class="search-button" style="font-size: 24px;">
                                     <i class="icon icon-search"></i>
@@ -45,7 +47,7 @@
                 </div>
             </div>
         </nav>
-        <nav class="primary-nav">
+        <nav class="primary-nav position-relative z-1">
             <div class="container">
                 <div class="row d-sm-flex d-none align-items-center">
                     <div class="col-lg-2 col-md-2">

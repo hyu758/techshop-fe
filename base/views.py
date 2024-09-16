@@ -168,26 +168,6 @@ def product_detail(request, product_id):
 
     return render(request, 'productDetail.html', context)
 
-@csrf_exempt
-def add_to_cart(request):
-    if request.method == 'POST':
-        data = json.loads(request.body)
-        product_id = data.get('productId')
-        quantity = data.get('quantity')
-
-        # Logic để thêm sản phẩm vào giỏ hàng
-        # Giả sử bạn đang sử dụng session để lưu giỏ hàng
-        cart = request.session.get('cart', {})
-        if product_id in cart:
-            cart[product_id] += quantity
-        else:
-            cart[product_id] = quantity
-
-        request.session['cart'] = cart
-
-        return JsonResponse({'status': 'success'})
-
-    return JsonResponse({'status': 'fail'}, status=400)
 
 
 def profile(request):
@@ -267,6 +247,7 @@ def upload_image(request):
 
     return redirect('/profile')
 
+#CART
 
 def cart(request):
     userId = request.session.get('user', {}).get('id')
@@ -289,7 +270,7 @@ def cart(request):
             data = response.json() 
             print(data)
             context = {
-                'cartItem': data  
+                'cartItems': data  
             }
         else:
             context = {
@@ -306,6 +287,92 @@ def cart(request):
     # Render the 'cart.html' template with the context
     return render(request, 'cart.html', context)
 
+def updateCart(request):
+    if request.method == 'POST':
+        try:
+            # Lấy dữ liệu từ yêu cầu POST
+            data = json.loads(request.body)
+            user_id = request.session.get('user', {}).get('id')
+            cart_items = data.get('cartItems')
+            print('updateCart', user_id)
+            if not user_id or not cart_items:
+                return JsonResponse({'error': 'Invalid data'}, status=400)
+
+            # Gọi API để cập nhật giỏ hàng
+            for item in cart_items:
+                product_id = item['product_id']
+                quantity = item['quantity']
+
+                # Giả sử bạn có một endpoint trong API để cập nhật giỏ hàng
+                url = f'http://localhost:3000/api/updateCart/{user_id}'
+                payload = {
+                    'productId': product_id,
+                    'quantity': quantity
+                }
+
+                response = requests.post(url, json=payload)
+
+                if response.status_code != 200:
+                    return JsonResponse({'error': 'Failed to update cart'}, status=500)
+
+            return JsonResponse({'message': 'Cart updated successfully'}, status=200)
+
+        except Exception as e:
+            print(f"Error: {e}")
+            return JsonResponse({'error': 'An error occurred while updating the cart'}, status=500)
+
+    return JsonResponse({'error': 'Invalid request method'}, status=400)
+
+def deleteFromCart(request):
+    if (request.method == 'DELETE'):
+        try:
+            user_id = request.session.get('user', {}).get('id')
+            productId = json.loads(request.body)
+            print(productId)
+            url = f'http://localhost:3000/api/deleteFromCart/{user_id}'
+
+            payload = {
+                'productId' : productId['productID']
+            }
+            response = requests.delete(url, json=payload)
+            if response.status_code != 200:
+                return JsonResponse({'error': 'Failed to update cart'}, status=500)
+
+            return JsonResponse({'message': 'Cart updated successfully'}, status=200)
+        except Exception as e:
+            print(f"Error: {e}")
+            return JsonResponse({'error': 'An error occurred while updating the cart'}, status=500)
+
+    return JsonResponse({'error': 'Invalid request method'}, status=400)
+
+
+def add_to_cart(request):
+    if request.method == 'POST':
+        user_id = request.session.get('user', {}).get('id')
+        data = json.loads(request.body)
+        product_id = data.get('productId')
+        quantity = data.get('quantity')
+        payload = {
+            'userId' : user_id,
+            'productId': product_id,
+            'quantity': quantity
+        }
+        print(payload)
+        url = f"http://localhost:3000/api/addToCart"
+        try:
+            response = requests.post(url, json = payload)
+            if response.status_code != 200:
+                return JsonResponse({'error': 'Failed to update cart'}, status=500)
+
+            return JsonResponse({'message': 'Add to cart successfully'}, status=200)
+        except Exception as e:
+            print(f"Error: {e}")
+            return JsonResponse({'error': 'An error occurred while add to cart'}, status=500)
+
+    return JsonResponse({'error': 'Invalid request method'}, status=400)
+
+
+#CHECKOUT
 def checkout(request):
     url = "https://techshop-backend-c7hy.onrender.com/api/orderItem"
     response = requests.get(url)

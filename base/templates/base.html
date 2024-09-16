@@ -27,7 +27,7 @@
         Your Site Title
       {% endblock %}
     </title>
-
+    <link rel="icon" href="{%static "image/logo-chan"%}" type="image/x-icon">
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}?alo">
     <link rel="stylesheet" type="text/css" href="{% static 'css/vendor.css' %}?alo">
     <link rel="stylesheet" type="text/css" href="{% static 'css/normalize.css' %}?alo">
@@ -54,7 +54,7 @@
     
   </head>
 
-  <body class="font-[poppins]">
+  <body class="">
     <div class="preloader-wrapper">
       <div class="preloader"></div>
     </div>
@@ -72,6 +72,7 @@
 
 
     <!-- Additional JavaScript -->
+     
     <script src="{% static 'js/jquery-1.11.0.min.js' %}"></script>
     <script src="{% static 'js/script.js' %}"></script>
     <script src="{% static 'js/plugins.js' %}"></script>

@@ -2,12 +2,15 @@ function parsePrice(priceString) {
     // Loại bỏ dấu phân cách hàng nghìn và chuyển đổi thành số
     return parseFloat(priceString.replace(/,/g, ''));
 }
-
+function getCSRFToken() {
+    return document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+}
 let products = [];
 const productsData = JSON.parse(document.getElementById('products-data').textContent);
 products = productsData;
 
 document.addEventListener('DOMContentLoaded', function () {
+    console.log(document.querySelectorAll('.cart-link'));
     const resetFiltersButton = document.getElementById('reset-filters');
     const searchForm = document.getElementById('search-form');
     const searchInput = document.getElementById('search-input');
@@ -18,7 +21,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const priceFilters = document.querySelectorAll('.widget-price-filter a');
     const brandFilters = document.querySelectorAll('.widget-product-brands .tags-item a');
     const applyPriceFilterButton = document.getElementById('apply-price-filter');
-    
+
     let products = JSON.parse(document.getElementById('products-data').textContent);
     let currentPage = 1;
     const pageSize = 9; // Số sản phẩm trên mỗi trang
@@ -61,12 +64,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 <div class="product-item col-lg-4 col-md-6 col-sm-6" style="margin-bottom: 80px !important" data-category-id="${product.category_id}">
                   <div class="image-holder">
                     <a href="/product/${product.id}/">
-                      <img src="${product.image_url}" alt="${product.name}" class="product-image ">
+                      <img src="${product.image_url}" alt="${product.name}" class="product-image">
                     </a>
                   </div>
                   <div class="cart-concern border-1">
                     <div class="cart-button d-flex justify-content-between align-items-center">
-                      <button type="button" class="btn-wrap cart-link d-flex align-items-center">add to cart <i class="icon icon-arrow-io"></i></button>
+                      <button type="button" class="btn-wrap cart-link d-flex align-items-center" data-product-id="${product.id}">add to cart <i class="icon icon-arrow-io"></i></button>
                       <button type="button" class="view-btn tooltip d-flex">
                         <i class="icon icon-screen-full"></i>
                         <span class="tooltip-text">Quick view</span>
@@ -239,8 +242,8 @@ document.addEventListener('DOMContentLoaded', function () {
             let priceRange = this.getAttribute('data-price-filter');
             let [min, max] = priceRange.split('-').map(Number);
 
-            min*= 1000000
-            max*= 1000000
+            min *= 1000000
+            max *= 1000000
 
             currentPriceRange = `${min}-${max}`;
             console.log("currentPriceRange", currentPriceRange);
@@ -299,10 +302,11 @@ document.addEventListener('DOMContentLoaded', function () {
         applyFilters();
     }
 
+
     resetFiltersButton.addEventListener('click', function (event) {
         event.preventDefault();
         resetFilters();
     });
-
     applyFilters();
 });
+
