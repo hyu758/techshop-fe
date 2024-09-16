@@ -72,7 +72,8 @@
 
 
     <!-- Additional JavaScript -->
-     
+    {% csrf_token %}
+    <meta name="csrf-token" content="{{ csrf_token }}">
     <script src="{% static 'js/jquery-1.11.0.min.js' %}"></script>
     <script src="{% static 'js/script.js' %}"></script>
     <script src="{% static 'js/plugins.js' %}"></script>

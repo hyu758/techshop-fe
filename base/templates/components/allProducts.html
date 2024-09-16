@@ -4,34 +4,39 @@
     <div class="row">
       <section id="selling-products" class="col-md-9 product-store">
         <div class="container">
-          <ul class="tabs list-unstyled">
-            <li data-tab-target="#all" cate-id="0" class="active tab">All</li>
-            <li data-tab-target="#Laptop" cate-id="1" class="tab">Laptop</li>
-            <li data-tab-target="#PC" cate-id="5" class="tab">PC</li>
-            <li data-tab-target="#Keyboard" cate-id="3" class="tab">Keyboard</li>
-            <li data-tab-target="#Mouse" cate-id="4" class="tab">Mouse</li>
-            <li data-tab-target="#Monitor" cate-id="2" class="tab">Monitor</li>
-          </ul>
+          <div class="d-flex gap-4 justify-content-between">
+            <ul class="tabs list-unstyled">
+              <li data-tab-target="#all" cate-id="0" class="active tab">All</li>
+              <li data-tab-target="#Laptop" cate-id="1" class="tab">Laptop</li>
+              <li data-tab-target="#PC" cate-id="5" class="tab">PC</li>
+              <li data-tab-target="#Keyboard" cate-id="3" class="tab">Keyboard</li>
+              <li data-tab-target="#Mouse" cate-id="4" class="tab">Mouse</li>
+              <li data-tab-target="#Monitor" cate-id="2" class="tab">Monitor</li>
+            </ul>
+              <div class="sort-options">
+                <select id="sort-select" class="form-select">
+                  <option value="name-asc">Sắp xếp từ A-Z</option>
+                  <option value="name-desc">Sắp xếp từ Z-A</option>
+                  <option value="price-asc">Giá tăng dần</option>
+                  <option value="price-desc">Giá giảm dần</option>
+                </select>
+              </div>
+          </div>
           <div class="tab-content">
             <div id="all" data-tab-content class="active">
               <div class="spinner-wrapper w-100 d-flex">
                 <div class="spinner justify-content-center align-items-center"></div>
               </div>
-              <div class="row d-flex flex-wrap" id="product-list">
-              </div>
+              <div class="row d-flex flex-wrap" id="product-list"></div>
             </div>
           </div>
           <nav class="navigation paging-navigation text-center padding-medium" role="navigation">
             <div class="pagination loop-pagination d-flex justify-content-center">
-              <a href="#" class="pagination-arrow d-flex align-items-center">
-                <i class="icon icon-arrow-left"></i>
-              </a>
+              <a href="#" class="pagination-arrow d-flex align-items-center"><i class="icon icon-arrow-left"></i></a>
               <span aria-current="page" class="page-numbers current">1</span>
               <a class="page-numbers" href="#">2</a>
               <a class="page-numbers" href="#">3</a>
-              <a href="#" class="pagination-arrow d-flex align-items-center">
-                <i class="icon icon-arrow-right"></i>
-              </a>
+              <a href="#" class="pagination-arrow d-flex align-items-center"><i class="icon icon-arrow-right"></i></a>
             </div>
           </nav>
         </div>
@@ -40,13 +45,13 @@
         <div class="sidebar">
           <div class="widgets widget-menu">
             <div class="widget-search-bar">
-              <form role="search" method="get" class="d-flex" id = "search-form">
-                <input class="search-field" placeholder="Search" type="text" style="height: 50px;" id="search-input">
+              <form role="search" method="get" class="d-flex" id="search-form">
+                <input class="search-field" placeholder="Search" type="text" style="height: 50px;" id="search-input" />
                 <button class="btn btn-dark rounded-0 rounded-end" type="submit"><i class="icon icon-search"></i></button>
               </form>
               <div id="search-results-panel" class="search-panel d-none overflow-auto position-absolute bg-white" style="max-height: 548px; z-index: 9999;">
                 <!-- Kết quả tìm kiếm sẽ được thêm vào đây -->
-            </div>
+              </div>
             </div>
           </div>
         </div>
@@ -108,13 +113,10 @@
   </div>
 </div>
 
-<small class="rating hidden" style="visibility: hidden;" data-full-star="{% static 'image/full-star.png' %}" data-half-star="{% static 'image/half-star.png' %}" data-empty-star="{% static 'image/empty-star.png' %}">
-</small>
+<small class="rating hidden" style="visibility: hidden;" data-full-star="{% static 'image/full-star.png' %}" data-half-star="{% static 'image/half-star.png' %}" data-empty-star="{% static 'image/empty-star.png' %}"></small>
 
-{{ products|json_script:"products-data" }}
-{% csrf_token %}
-<meta name="csrf-token" content="{{ csrf_token }}">
+{{ products|json_script:'products-data' }}
 
-<script src="{% static "js/starRating.js" %}"></script>
-<script src="{% static "js/allProducts.js" %}"></script>
-<script src="{% static "js/addToCart.js" %}"></script>
+<script src="{% static 'js/starRating.js' %}"></script>
+<script src="{% static 'js/allProducts.js' %}"></script>
+<script src="{% static 'js/addToCart.js' %}"></script>

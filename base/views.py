@@ -258,7 +258,7 @@ def cart(request):
         return JsonResponse({'error': 'Missing userId '}, status=400)
 
     # url = f"https://techshop-backend-c7hy.onrender.com/api/getOrderItemByUserAndStatus/{userId}/{status}"
-    url = f"http://localhost:3000/api/getCartByUserId/{userId}"
+    url = f"https://techshop-backend-c7hy.onrender.com/api/getCartByUserId/{userId}"
     
     try:
         response = requests.get(url)
@@ -304,7 +304,7 @@ def updateCart(request):
                 quantity = item['quantity']
 
                 # Giả sử bạn có một endpoint trong API để cập nhật giỏ hàng
-                url = f'http://localhost:3000/api/updateCart/{user_id}'
+                url = f'https://techshop-backend-c7hy.onrender.com/api/updateCart/{user_id}'
                 payload = {
                     'productId': product_id,
                     'quantity': quantity
@@ -329,7 +329,7 @@ def deleteFromCart(request):
             user_id = request.session.get('user', {}).get('id')
             productId = json.loads(request.body)
             print(productId)
-            url = f'http://localhost:3000/api/deleteFromCart/{user_id}'
+            url = f'https://techshop-backend-c7hy.onrender.com/api/deleteFromCart/{user_id}'
 
             payload = {
                 'productId' : productId['productID']
@@ -348,6 +348,10 @@ def deleteFromCart(request):
 
 def add_to_cart(request):
     if request.method == 'POST':
+        if (not request.session.get('user', {})):
+            print('ALO?')
+            return JsonResponse({'error': 'not_logged_in'}, status=403)
+
         user_id = request.session.get('user', {}).get('id')
         data = json.loads(request.body)
         product_id = data.get('productId')
@@ -358,7 +362,7 @@ def add_to_cart(request):
             'quantity': quantity
         }
         print(payload)
-        url = f"http://localhost:3000/api/addToCart"
+        url = f"https://techshop-backend-c7hy.onrender.com/api/addToCart"
         try:
             response = requests.post(url, json = payload)
             if response.status_code != 200:
@@ -371,6 +375,22 @@ def add_to_cart(request):
 
     return JsonResponse({'error': 'Invalid request method'}, status=400)
 
+def deleteAllCart(request):
+    if request.method == "DELETE":
+        user_id = request.session.get('user', {}).get('id')
+        print('DELETE ALL CART', user_id)
+        url = f"http://localhost:3000/api/deleteAllCart/{user_id}"
+        try:
+            response = requests.delete(url)
+            print(response)
+            if response.status_code != 200:
+                return JsonResponse({'error': 'Failed to delete all cart'}, status=500)
+            return JsonResponse({'messages': 'Delete all cart successfully'})
+        except Exception as e:
+            print(f"Error: {e}")
+        return JsonResponse({'error': 'An error occurred while deleting the cart'}, status=500)
+
+    return JsonResponse({'error': 'Invalid request method'}, status=400)
 
 #CHECKOUT
 def checkout(request):

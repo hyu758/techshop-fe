@@ -10,7 +10,9 @@ const productsData = JSON.parse(document.getElementById('products-data').textCon
 products = productsData;
 
 document.addEventListener('DOMContentLoaded', function () {
-    console.log(document.querySelectorAll('.cart-link'));
+    const urlParams = new URLSearchParams(window.location.search);
+    const cateid = urlParams.get('cateid');
+    const br = urlParams.get('brand')
     const resetFiltersButton = document.getElementById('reset-filters');
     const searchForm = document.getElementById('search-form');
     const searchInput = document.getElementById('search-input');
@@ -21,6 +23,9 @@ document.addEventListener('DOMContentLoaded', function () {
     const priceFilters = document.querySelectorAll('.widget-price-filter a');
     const brandFilters = document.querySelectorAll('.widget-product-brands .tags-item a');
     const applyPriceFilterButton = document.getElementById('apply-price-filter');
+    const tabs = document.querySelectorAll('.tabs .tab');
+    const sortSelect = document.getElementById('sort-select');
+    const sortOptions = sortSelect.querySelectorAll('option');
 
     let products = JSON.parse(document.getElementById('products-data').textContent);
     let currentPage = 1;
@@ -29,7 +34,29 @@ document.addEventListener('DOMContentLoaded', function () {
     let currentCategoryId = '0';
     let currentBrand = '';
     let searchQuery = '';
+    let currentSortOrder = 'name-asc';
 
+    if (cateid) {
+        tabs.forEach(tab => {
+            if (tab.getAttribute('cate-id') === cateid) {
+                tab.classList.add('active');
+                // Cập nhật currentCategoryId để áp dụng filter đúng
+                currentCategoryId = cateid;
+            } else {
+                tab.classList.remove('active');
+            }
+        });
+    }
+    if (br) {
+        brandFilters.forEach(filter => {
+            if (filter.textContent.trim() === br) {
+                filter.classList.add('active');
+                currentBrand = br;
+            } else {
+                filter.classList.remove('active');
+            }
+        });
+    }
     function parsePrice(priceString) {
         return parseFloat(priceString.replace(/,/g, ''));
     }
@@ -51,7 +78,18 @@ document.addEventListener('DOMContentLoaded', function () {
 
             return inPriceRange && inBrand && inCategory && matchesSearchQuery;
         });
-
+        filteredProducts.sort((a, b) => {
+            if (currentSortOrder === 'name-asc') {
+                return a.name.localeCompare(b.name);
+            } else if (currentSortOrder === 'name-desc') {
+                return b.name.localeCompare(a.name);
+            } else if (currentSortOrder === 'price-asc') {
+                return parsePrice(a.price) - parsePrice(b.price);
+            } else if (currentSortOrder === 'price-desc') {
+                return parsePrice(b.price) - parsePrice(a.price);
+            }
+            return 0;
+        });
         const totalPages = Math.ceil(filteredProducts.length / pageSize);
         const startIndex = (currentPage - 1) * pageSize;
         const endIndex = currentPage * pageSize;
@@ -174,8 +212,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 `;
                 searchResultsPanel.appendChild(resultItem);
             });
-        } else {
-            searchResultsPanel.innerHTML = '<p>Không có kết quả tìm kiếm</p>';
         }
     }
 
@@ -223,7 +259,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    const tabs = document.querySelectorAll('.tabs .tab');
     tabs.forEach(tab => {
         tab.addEventListener('click', function () {
             const categoryId = this.getAttribute('cate-id');
@@ -306,6 +341,17 @@ document.addEventListener('DOMContentLoaded', function () {
     resetFiltersButton.addEventListener('click', function (event) {
         event.preventDefault();
         resetFilters();
+    });
+
+    sortSelect.addEventListener('change', function (e) {
+        const selectedValue = this.value;
+        currentSortOrder = selectedValue;
+        sortOptions.forEach(opt => opt.classList.remove('active'));
+        const activeOption = Array.from(sortOptions).find(opt => opt.value === selectedValue);
+        if (activeOption) {
+            activeOption.classList.add('active');
+        }
+        applyFilters();
     });
     applyFilters();
 });

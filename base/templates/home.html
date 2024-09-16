@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{%load static%}
 {% block title %} Home {% endblock %}
 {% block content%}
 {% include 'partials/header.html' %}
@@ -13,4 +14,41 @@
     </div>
 </div>
 {% include 'partials/footer.html' %}
+<script src="{% static "js/addToCart.js" %}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const fullStar = "{% static 'image/full-star.png' %}";
+      const halfStar = "{% static 'image/half-star.png' %}";
+      const emptyStar = "{% static 'image/empty-star.png' %}";
+    
+      function renderRating(starsContainer, rating) {
+        let fullStars = Math.floor(rating);
+        let halfStars = (rating % 1) >= 0.5 ? 1 : 0;
+        let emptyStars = 5 - fullStars - halfStars;
+    
+        let starsHTML = '';
+    
+        for (let i = 0; i < fullStars; i++) {
+          starsHTML += `<img src="${fullStar}" alt="Full Star">`;
+        }
+    
+        if (halfStars > 0) {
+          starsHTML += `<img src="${halfStar}" alt="Half Star">`;
+        }
+    
+        for (let i = 0; i < emptyStars; i++) {
+          starsHTML += `<img src="${emptyStar}" alt="Empty Star">`;
+        }
+    
+        starsContainer.innerHTML = starsHTML;
+      }
+    
+      // Cập nhật rating cho tất cả các sản phẩm
+      const starsElements = document.querySelectorAll('.stars');
+      starsElements.forEach(starsContainer => {
+        const rating = parseFloat(starsContainer.getAttribute('data-rating'));
+        renderRating(starsContainer, rating);
+      });
+    }); 
+  </script>
 {% endblock %}
