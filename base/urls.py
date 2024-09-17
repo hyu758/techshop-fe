@@ -16,5 +16,6 @@ urlpatterns = [
     path('api/updateCart/', updateCart, name="updateCart"),
     path('api/deleteFromCart', deleteFromCart, name = "deleteFromCart"),
     path('api/deleteAllCart/', deleteAllCart, name = "deleteAllCart"),
-    path('upload_image/', upload_image, name = "upload_image")
+    path('upload_image/', upload_image, name = "upload_image"),
+    path('api/createOrder/', createOrder, name="create_order")
 ]

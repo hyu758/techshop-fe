@@ -437,13 +437,19 @@ def createOrder(request):
                 'address': address
             }
 
+            print(api_data)
+
             # Gửi yêu cầu đến API bên ngoài
             api_url = 'https://techshop-backend-c7hy.onrender.com/api/orderItem'
+            # api_url = 'http://127.0.0.1:3000/api/orderItem'
             response = requests.post(api_url, json=api_data)
 
             # Xử lý phản hồi từ API
             if response.status_code == 200:
-                return JsonResponse({'message': 'Order created successfully'}, status=200)
+                jsonData = response.json()    
+                paymentUrl = jsonData.get('paymentUrl')
+                print(paymentUrl)
+                return JsonResponse({'message': 'Order created successfully', 'paymentUrl': paymentUrl}, status=200)
             else:
                 # Nếu API trả về lỗi, truyền lỗi về cho frontend
                 return JsonResponse({'error': 'Failed to create order', 'details': response.json()}, status=response.status_code)
@@ -453,38 +459,3 @@ def createOrder(request):
             return JsonResponse({'error': 'Error while connecting to the external API', 'details': str(e)}, status=500)
 
     return JsonResponse({'error': 'Method not allowed'}, status=405)
-
-
-def createPayment(request):
-    if request.method == 'POST':
-        try:
-            # Giải mã dữ liệu JSON từ request body
-            data = json.loads(request.body)
-            orderId = data.get('orderId', [])
-            user_id = request.session.get('user', {}).get('id')
-
-            if not user_id:
-                return JsonResponse({'error': 'User not authenticated'}, status=401)
-
-            # Chuẩn bị dữ liệu để gọi API thanh toán
-            payment_data = {
-                'userId': user_id,
-                'orderId': orderId
-            }
-
-            # Gọi API thanh toán
-            response = requests.post('https://techshop-backend-c7hy.onrender.com/api/payment', json=payment_data)
-
-            if response.status_code == 200:
-                payment_result = response.json()
-                if payment_result.get('return_code') == 1:
-                    # Chuyển hướng người dùng đến trang thanh toán
-                    return HttpResponseRedirect(payment_result.get('order_url'))
-                else:
-                    return JsonResponse({'error': payment_result.get('return_message')}, status=400)
-            else:
-                return JsonResponse({'error': 'Payment API error'}, status=500)
-        except json.JSONDecodeError:
-            return JsonResponse({'error': 'Invalid JSON'}, status=400)
-
-    return JsonResponse({'error': 'Invalid request method'}, status=405)
