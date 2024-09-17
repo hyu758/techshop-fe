@@ -1,7 +1,7 @@
 const products = JSON.parse(document.getElementById('products-data').textContent)
 console.log('CHECKOUT', products)
 function getCSRFToken() {
-    return document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+  return document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 }
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -57,7 +57,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Chuẩn bị dữ liệu để gửi
     const orderData = {
-      userId: userId,
       productIds: productIds,
       quantities: quantities,
       phone: phone,
@@ -76,14 +75,16 @@ document.addEventListener('DOMContentLoaded', function () {
       })
 
       if (response.ok) {
-        const result = await response.json()
-        // Hiển thị thông báo thành công
-        console.log(response)
-        Swal.fire('Thành công', 'Đơn hàng của bạn đã được tạo thành công!', 'success').then(() => {
-          window.location.href = '/' // Chuyển hướng tới trang xác nhận đơn hàng
-        })
+        const result = await response.json();
+        console.log(result.paymentUrl);
+        Swal.fire('Thành công', 'Đơn hàng của bạn đã được tạo thành công! \nBạn sẽ được chuyển đến trang thanh toán.', 'success').then(() => {
+          setTimeout(() => {
+            window.location.href = result.paymentUrl; // Chuyển hướng đến paymentUrl
+          }, 1234); // 1,234 giây
+        });
       } else {
-        Swal.fire('Lỗi', 'Đã có lỗi xảy ra. Vui lòng thử lại.', 'error')
+        const errorResult = await response.json();
+        Swal.fire('Lỗi', errorResult.error || 'Đã có lỗi xảy ra. Vui lòng thử lại.', 'error');
       }
     } catch (error) {
       console.error('Error:', error)
