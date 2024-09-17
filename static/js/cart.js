@@ -219,5 +219,34 @@ document.getElementById('cartItemsContainer').addEventListener('change', functio
     }
 });
 
+document.getElementById('checkoutButton').addEventListener('click', function () {
+    if (selectedItems.length === 0) {
+        Swal.fire('Thông báo', 'Vui lòng chọn ít nhất một sản phẩm để thanh toán.', 'warning');
+        return;
+    }
+    console.log('??', selectedItems)
+    fetch('/checkout/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCSRFToken()
+        },
+        body: JSON.stringify({ products: selectedItems })
+    })
+    .then(response => {
+        if (response.ok) {
+            // Sau khi gửi dữ liệu thành công, chuyển hướng tới trang checkout
+            window.location.href = '/checkout/';
+        } else {
+            throw new Error('Checkout failed');
+        }
+    })
+    .catch(error => {
+        console.error('Checkout error:', error);
+        Swal.fire('Lỗi', 'Đã có lỗi xảy ra trong quá trình check out.', 'error');
+    });
+});
+
+
 // Khởi tạo giỏ hàng khi trang được tải
 renderCartItems();

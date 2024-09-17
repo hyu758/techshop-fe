@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block title %}
   Checkout
 {% endblock %}
@@ -80,49 +81,6 @@
 
   {% include 'partials/footer.html' %}
 
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      const apiUrl = '/api/cart-items/' // URL của API giỏ hàng
-    
-      const fetchCart = async () => {
-        try {
-          const response = await fetch(apiUrl)
-          const data = await response.json()
-          return data
-        } catch (error) {
-          console.error('Error fetching cart:', error)
-        }
-      }
-    
-      const renderCart = (cart) => {
-        const cartItemsContainer = document.getElementById('cartItems')
-        cartItemsContainer.innerHTML = ''
-    
-        cart.forEach((item, index) => {
-          const row = `
-                <tr>
-                  <td>${item.product.name}</td>
-                  <td>${item.quantity}</td>
-                  <td>${item.product.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</td>
-                  <td>${(item.quantity * item.product.price).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</td>
-                </tr>
-              `
-          cartItemsContainer.insertAdjacentHTML('beforeend', row)
-        })
-    
-        document.getElementById('totalPrice').textContent = getTotal(cart).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })
-      }
-    
-      const getTotal = (cart) => {
-        return cart.reduce((total, item) => total + item.quantity * item.product.price, 0)
-      }
-    
-      const init = async () => {
-        const cartData = await fetchCart()
-        renderCart(cartData)
-      }
-    
-      init()
-    })
-  </script>
+  {{ products|json_script:'products-data' }}
+  <script src="{% static "js/checkout.js" %}"></script>
 {% endblock %}

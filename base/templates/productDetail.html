@@ -151,6 +151,9 @@
 
     <!-- JavaScript để hiển thị đánh giá (Rating) -->
     <script>
+        function getCSRFToken() {
+            return document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        }
         document.addEventListener('DOMContentLoaded', function() {
             // Hiển thị đánh giá (Rating)
             const ratingContainer = document.querySelector('.rating');
@@ -247,23 +250,54 @@
             addToCartButton.addEventListener('click', () => {
                 const quantity = parseInt(quantityInput.value);
                 const productId = {{ product.id }}; // ID sản phẩm từ Django
-                fetch('/api/add-to-cart/', {
+                console.log(quantity, productId)
+                fetch('/api/addToCart/', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'X-CSRFToken': '{{ csrf_token }}'
+                        'X-CSRFToken': getCSRFToken()
                     },
-                    body: JSON.stringify({ productId, quantity })
+                    body: JSON.stringify({
+                        productId: productId,
+                        quantity: quantity
+                    }),
                 })
                 .then(response => response.json())
                 .then(data => {
-                    alert('Sản phẩm đã được thêm vào giỏ hàng');
+                    console.log('ADD TO CART?', data)
+                    if (data.error === 'not_logged_in') {
+                        // Hiển thị popup yêu cầu đăng nhập
+                        Swal.fire({
+                            title: 'Bạn chưa đăng nhập',
+                            text: 'Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng.',
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonText: 'Đăng nhập',
+                            cancelButtonText: 'Hủy'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                // Điều hướng đến trang đăng nhập
+                                window.location.href = '/login/';
+                            }
+                        });
+                    } else {
+                        // Hiển thị thông báo thêm vào giỏ hàng thành công
+                        Swal.fire({
+                            title: 'Thành công!',
+                            text: 'Sản phẩm đã được thêm vào giỏ hàng.',
+                            icon: 'success',
+                            timer: 2000,
+                            showConfirmButton: false
+                        });
+                    }
                 })
                 .catch(error => {
-                    console.error('Error adding to cart:', error);
+                    console.error('Error adding item to cart:', error);
+                })
+                .finally(() => {
+                    isAddingToCart = false;  // Reset lại trạng thái
                 });
-            });
-        
+            })
             // Mua ngay
             buyNowButton.addEventListener('click', () => {
                 const quantity = parseInt(quantityInput.value);
