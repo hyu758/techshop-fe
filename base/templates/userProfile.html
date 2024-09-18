@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block title %}
   Profile details
 {% endblock %}
@@ -31,7 +32,7 @@
                     {% if user.avatar_url %}
                       <img src="{{ user.avatar_url }}" alt="avatar" class="rounded-circle img-fluid" style="width: 150px;" id="avatar-preview" />
                     {% else %}
-                      <img src="https://cdn.discordapp.com/attachments/1184857907049807977/1284097928163627019/avatar-default.jpg?ex=66e564e3&is=66e41363&hm=5e68100178addc90a737cd7c74331b11d1ee8cb0b74a2562be66d79ec73851b9&" alt="avatar" class="rounded-circle img-fluid" style="width: 150px;" id="avatar-preview" />
+                      <img src="{%static 'image/avatar-default.png'%}" alt="avatar" class="rounded-circle img-fluid" style="width: 150px;" id="avatar-preview" />
                     {% endif %}
                   </div>
                   <!-- Phần nút và input -->

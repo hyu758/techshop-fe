@@ -1,0 +1,193 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+  Order History
+{% endblock %}
+{% block content %}
+  {% include 'partials/header.html' %}
+  <div style="background-color: #f8fafc;">
+    <div class="container py-4">
+      {% for order in orders %}
+        <div class="card mb-3">
+          <div class="row g-0">
+            <div class="col-md-12">
+              <div class="card-body">
+                <div class="card-text d-sm-flex d-block justify-content-between mb-4">
+                  <div>
+                    <p>Mã đơn: {{order.order_id}}</p>
+                    <p>Tên người nhận: {{ order.customer_name }}</p>
+                    <p>Số điện thoại: {{ order.phone }}</p>
+                    <p>Địa chỉ nhận hàng: {{ order.address }}</p>
+                  </div>
+                  <div class="text-end m-sm-0 mt-2">
+                    Trạng thái:{% if order.status == 'delivered' %}
+                      <span class="text-success">Đã giao</span>
+                    {% elif order.status == 'pending' %}
+                      <span class="text-warning">Đang chờ thanh toán</span>
+                    {% else %}
+                      <span class="text-danger">Bị huỷ</span>
+                    {% endif %}
+                  </div>
+                </div>
+                <button class="text-primary" type="button" onclick="toggleDropdown('dropdown{{ order.order_id }}') ">Các sản phẩm đã mua</button>
+                <!-- Dropdown to show all products -->
+                <div id="dropdown{{ order.order_id }}" class="dropdown-content hidden mt-3 transition-transform duration-300 ease-in-out transform origin-top scale-95 "data-order-id='{{ order.order_id }}'">
+                  {% for product in order.products %}
+                    <div class="product-item d-flex align-items-center gap-4 border-top pt-3 pb-3">
+                      <div class="image-holder">
+                        <a href="/product/{{ product.product_id }}/"><img src="{{ product.image_url }}" alt="{{ product.product_name }}" class="object-fit-cover" style="height: 150px; width: 150px;" /></a>
+                      </div>
+                      <div class="product-detail flex-grow-1">
+                        <h3 class="product-title"><a href="single-product.html">{{ product.product_name }}</a></h3>
+                        {% if order.status != 'delivered' %}
+                            <div class = "mt-2"></div>
+                        {%else%}
+                            {% if product.isRated %}
+                                <div class="rating-container flex items-center gap-2 mb-2">
+                                    <div class="stars flex gap-1 items-center">
+                                        {% for i in "12345" %}
+                                            <img src="{% if i|add:0 <= product.rateValue %}{% static 'image/full-star.png' %}{% else %}{% static 'image/empty-star.png' %}{% endif %}" style="height: 15px; width: 15px;" alt="{{ i }} Star" />
+                                        {% endfor %}
+                                    </div>
+                                    <span class="rating-message ml-2 text-gray-600">Đã đánh giá</span>
+                                </div>
+                            {% else %}
+                                <div class="rating-container flex items-center gap-2 mb-2">
+                                    <div class="stars flex gap-1 items-center" data-product-id="{{ product.product_id }}">
+                                    <img src="{% static 'image/empty-star.png' %}" class="star-icon" data-value="1" alt="1 Star">
+                                    <img src="{% static 'image/empty-star.png' %}" class="star-icon" data-value="2" alt="2 Stars">
+                                    <img src="{% static 'image/empty-star.png' %}" class="star-icon" data-value="3" alt="3 Stars">
+                                    <img src="{% static 'image/empty-star.png' %}" class="star-icon" data-value="4" alt="4 Stars">
+                                    <img src="{% static 'image/empty-star.png' %}" class="star-icon" data-value="5" alt="5 Stars">
+                                    </div>
+                                    <span class="rating-message ml-2 text-gray-600">Click để đánh giá</span>
+                                </div>
+                            {% endif %}
+
+                        {%endif%}
+                        <span class="item-price fs-6 fw-semibold">Giá: {{ product.price }}₫</span>
+                        <div class="item-price fs-6 fw-semibold">Số lượng: {{ product.quantity }}</div>
+                      </div>
+                    </div>
+                  {% endfor %}
+                </div>
+                <div class="text-danger fs-5 text-end">Thành tiền: {{ order.total_amount }}₫</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% include 'partials/footer.html' %}
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>
+    function toggleDropdown(id) {
+      const dropdown = document.getElementById(id);
+      dropdown.classList.toggle('hidden');
+      dropdown.classList.toggle('scale-100');
+    }
+  
+    function getCSRFToken() {
+      return document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    }
+  
+    document.addEventListener('DOMContentLoaded', function() {
+  const starIcons = document.querySelectorAll('.star-icon');
+  
+  // Khi di chuột qua các sao
+  starIcons.forEach(star => {
+    star.addEventListener('mouseover', function() {
+      const value = this.getAttribute('data-value');
+      updateStarDisplay(this.closest('.stars'), value, 'hover');
+    });
+
+    star.addEventListener('mouseout', function() {
+      const rating = this.closest('.stars').getAttribute('data-rating');
+      updateStarDisplay(this.closest('.stars'), rating, 'normal');
+    });
+
+    // Khi nhấp vào sao
+    star.addEventListener('click', function() {
+      const productId = this.closest('.stars').getAttribute('data-product-id');
+      const rating = this.getAttribute('data-value');
+      const orderId = this.closest('.dropdown-content').getAttribute('data-order-id');
+
+      // Hiển thị hộp thoại xác nhận với SweetAlert2
+      Swal.fire({
+        title: 'Xác nhận đánh giá',
+        text: 'Bạn có muốn gửi đánh giá này không?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Gửi',
+        cancelButtonText: 'Hủy',
+        reverseButtons: true
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // Gửi đánh giá đến server
+          submitRating(orderId, productId, rating, this.closest('.stars'));
+        }
+      });
+    });
+  });
+
+  function updateStarDisplay(starContainer, rating, mode) {
+    const stars = starContainer.querySelectorAll('.star-icon');
+    stars.forEach(star => {
+      const value = parseInt(star.getAttribute('data-value'));
+      if (mode === 'hover' || mode === 'normal') {
+        star.src = value <= rating ? "{% static 'image/full-star.png' %}" : "{% static 'image/empty-star.png' %}";
+      }
+    });
+  }
+
+  function submitRating(orderId, productId, rating, starContainer) {
+    fetch(`/api/rateProduct/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': getCSRFToken()
+      },
+      body: JSON.stringify({ orderId: orderId, productId: productId, rating: rating })
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.message) {
+        // Đánh giá thành công
+        updateStarDisplay(starContainer, rating, 'normal');
+        starContainer.setAttribute('data-rating', rating);  // Cập nhật data-rating sau khi đánh giá
+        starContainer.closest('.rating-container').querySelector('.rating-message').textContent = 'Đã đánh giá';
+
+        // Thông báo thành công cho người dùng
+        Swal.fire({
+          title: 'Đánh giá thành công',
+          text: 'Cảm ơn bạn đã đánh giá sản phẩm!',
+          icon: 'success',
+          confirmButtonText: 'Đóng'
+        });
+      } else {
+        // Xử lý lỗi
+        Swal.fire({
+          title: 'Lỗi',
+          text: 'Có lỗi xảy ra khi gửi đánh giá. Vui lòng thử lại.',
+          icon: 'error',
+          confirmButtonText: 'Đóng'
+        });
+      }
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+      // Thông báo lỗi
+      Swal.fire({
+        title: 'Lỗi',
+        text: 'Có lỗi xảy ra khi gửi đánh giá. Vui lòng thử lại.',
+        icon: 'error',
+        confirmButtonText: 'Đóng'
+      });
+    });
+  }
+});
+
+  </script>
+  
+{% endblock %}

@@ -458,3 +458,69 @@ def createOrder(request):
             return JsonResponse({'error': 'Error while connecting to the external API', 'details': str(e)}, status=500)
 
     return JsonResponse({'error': 'Method not allowed'}, status=405)
+
+
+
+def orderHistory(request):
+    userId = request.session.get('user', {}).get('id')
+    
+    api_url = f'http://localhost:3000/api/getOrderByUser/{userId}'
+    
+    try:
+        response = requests.get(api_url)
+        response.raise_for_status()  # Raise HTTPError for bad responses (4xx or 5xx)
+        data = response.json()
+        print(data)
+    except requests.exceptions.HTTPError as http_err:
+        data = []
+    except requests.exceptions.RequestException as req_err:
+        data = []
+    
+    
+    context = {
+        'orders': data,
+    }
+    
+    print(context)
+    return render(request, 'orderHistory.html', context)
+
+import json
+import requests
+from django.http import JsonResponse
+
+def rateProduct(request):
+    if request.method == 'POST':
+        try:
+            # Lấy dữ liệu từ body của yêu cầu
+            data = json.loads(request.body)
+            product_id = data.get('productId')
+            rating = data.get('rating')
+            order_id = data.get('orderId')  # Thêm orderId nếu cần
+            print(f"Product ID: {product_id}, Rating: {rating}, Order ID: {order_id}")
+
+            if not product_id or rating is None:
+                return JsonResponse({'error': 'Product ID and rating are required'}, status=400)
+
+            # URL API với dữ liệu từ body
+            api_url = 'http://localhost:3000/api/rateProduct'
+            payload = {
+                'productId': product_id,
+                'rating': rating,
+                'orderId': order_id  # Gửi orderId nếu cần
+            }
+            print(payload)
+            # Gửi request đến API
+            response = requests.post(api_url, json=payload)
+
+            if response.status_code == 200:
+                return JsonResponse({'message': 'Product rating updated successfully', 'product': response.json()})
+            else:
+                return JsonResponse({'error': 'Failed to update product rating'}, status=response.status_code)
+
+        except requests.exceptions.RequestException as e:
+            print(f"Request Error: {e}")
+            return JsonResponse({'error': 'Internal server error'}, status=500)
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'Invalid JSON format'}, status=400)
+    else:
+        return JsonResponse({'error': 'Invalid request method'}, status=405)
