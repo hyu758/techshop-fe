@@ -131,10 +131,11 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),  # Đường dẫn tới thư mục tĩnh trong dự án
+    os.path.join(BASE_DIR, 'static'),  # Thư mục static của bạn
+    os.path.join(BASE_DIR, 'theme/static'),  # Static của app theme (django-tailwind)
 ]
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # Thư mục thu thập tệp tĩnh
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
