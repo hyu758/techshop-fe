@@ -9,11 +9,13 @@ colorama==0.4.6
 cookiecutter==2.6.0
 Django==5.1
 django-tailwind==3.8.0
+gunicorn==23.0.0
 idna==3.7
 Jinja2==3.1.4
 markdown-it-py==3.0.0
 MarkupSafe==2.1.5
 mdurl==0.1.2
+packaging==24.1
 Pygments==2.18.0
 python-dateutil==2.9.0.post0
 python-slugify==8.0.4
