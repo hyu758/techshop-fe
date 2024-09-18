@@ -143,7 +143,6 @@ def shop(request):
         products = []
         brands = []
 
-
     context = {
         'products': products,
         'brands': brands
