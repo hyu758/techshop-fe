@@ -24,10 +24,5 @@
             "src": "/(.*)",
             "dest": "techshop/wsgi.py" 
         }
-    ],
-    "build": {
-        "commands": [
-            "python manage.py collectstatic --noinput"
-        ]
-    }
+    ]
 }
