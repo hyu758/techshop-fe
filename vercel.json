@@ -1,9 +1,20 @@
 {
-    "builds": [{
-        "src": "techshop/wsgi.py",
-        "use": "@vercel/python",
-        "config": { "maxLambdaSize": "15mb", "runtime": "python3.12.0" }
-    }],
+    "version": 2,
+    "builds": [
+        {
+            "src": "techshop/wsgi.py",
+            "use": "@vercel/python",
+            "config": { "maxLambdaSize": "15mb", "runtime": "python3.12.0" }
+        },
+        {
+            "src": "theme/package.json",
+            "use": "@vercel/static-build",
+            "config": {
+                "distDir": "../static/css/dist",
+                "buildCommand": "npm install && npm run build"
+            }
+        }
+    ],
     "routes": [
         {
             "src": "/(.*)",
