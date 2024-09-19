@@ -265,7 +265,6 @@
             addToCartButton.addEventListener('click', () => {
                 const quantity = parseInt(quantityInput.value);
                 const productId = {{ product.id }}; // ID sản phẩm từ Django
-                console.log(quantity, productId)
                 fetch('/api/addToCart/', {
                     method: 'POST',
                     headers: {
@@ -279,7 +278,6 @@
                 })
                 .then(response => response.json())
                 .then(data => {
-                    console.log('ADD TO CART?', data)
                     if (data.error === 'not_logged_in') {
                         // Hiển thị popup yêu cầu đăng nhập
                         Swal.fire({
