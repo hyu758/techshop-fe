@@ -229,7 +229,7 @@ def upload_image(request):
             files = {'img': avatar}
             data = {'user_id': user_id}  # Thêm user_id vào dữ liệu gửi đi
             
-            api_url = 'https://techshop-backend-c7hy.onrender.com/uploadImage'  # Đảm bảo URL chính xác
+            api_url = 'https://techshop-backend-c7hy.onrender.com/api/uploadImage'  # Đảm bảo URL chính xác
 
             try:
                 response = requests.post(api_url, files=files, data=data)  # Gửi cả files và data
@@ -480,10 +480,6 @@ def orderHistory(request):
     print(context)
     return render(request, 'orderHistory.html', context)
 
-import json
-import requests
-from django.http import JsonResponse
-
 def rateProduct(request):
     if request.method == 'POST':
         try:
@@ -498,7 +494,9 @@ def rateProduct(request):
                 return JsonResponse({'error': 'Product ID and rating are required'}, status=400)
 
             # URL API với dữ liệu từ body
-            api_url = 'https://techshop-backend-c7hy.onrender.com/api/rateProduct'
+            # api_url = 'https://techshop-backend-c7hy.onrender.com/api/rateProduct'
+            api_url = 'http://127.0.0.1:3000/api/rateProduct'
+
             payload = {
                 'productId': product_id,
                 'rating': rating,
