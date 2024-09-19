@@ -28,7 +28,7 @@
                 </div>
               </div>
               <div class="product-detail">
-                <h3 class="product-title"><a href="single-product.html">{{ product.name }}</a></h3>
+                <h3 class="product-title"><a href="/product/{{product.id}}/">{{ product.name }}</a></h3>
                 <div class ="d-flex align-items-center gap-2 mb-2">
                     <div class="stars d-flex rating" data-rating="{{ product.rating|default:0 }}"></div>
                     <div class="fs-6 text-secondary px-2 border-start">Đã bán: {{product.sold_quantity}}</div>

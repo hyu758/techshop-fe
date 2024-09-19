@@ -38,7 +38,7 @@
                         <a href="/product/{{ product.product_id }}/"><img src="{{ product.image_url }}" alt="{{ product.product_name }}" class="object-fit-cover" style="height: 150px; width: 150px;" /></a>
                       </div>
                       <div class="product-detail flex-grow-1">
-                        <h3 class="product-title"><a href="single-product.html">{{ product.product_name }}</a></h3>
+                        <h3 class="product-title"><a href="/product/{{ product.product_id }}/">{{ product.product_name }}</a></h3>
                         {% if order.status != 'delivered' %}
                             <div class = "mt-2"></div>
                         {%else%}
