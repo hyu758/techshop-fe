@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 {% block title %} Shopping page {% endblock %}
 {% block content %}
     {% include "partials/header.html" %}
@@ -19,7 +20,7 @@
       </div>
     </div>
     <!-- main content -->
-    <section class="site-banner jarallax min-height300 padding-large" style="background: url(images/hero-image.jpg) no-repeat; background-position: top;">
+    <section class="site-banner jarallax min-height300 padding-large" style="background: url({%static 'image/shoppage.webp'%}) no-repeat; background-position: top;">
       <div class="container">
           <div class="row">
             <div class="col-md-12">

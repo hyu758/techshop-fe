@@ -48,7 +48,13 @@
                                             </div>
                                             <div class="fs-6 text-secondary px-2 border-start">Đã bán: {{ product.sold_quantity }}</div>
                                         </div>
-                                        <div class="fs-6 text-secondary" style="font-family: 'Inter', sans-serif;"> Số sản phẩm còn lại: {{ product.stock_quantity }}</div>
+                                        <div class="fs-6 text-secondary" style="font-family: 'Inter', sans-serif;">
+                                            {% if product.stock_quantity %}
+                                                Số sản phẩm còn lại: {{ product.stock_quantity }}
+                                            {%else%}
+                                                Hết hàng
+                                            {%endif%}
+                                        </div>
                                         <!-- Giá sản phẩm -->
                                         <div class="item-price text-danger fs-3 fw-semibold" id="product-price">{{ product.price }}₫</div>
                                     </div>
@@ -104,6 +110,7 @@
                         <div class="card border-1">
                             <div class="card-body">
                                 <!-- Bộ đếm số lượng -->
+                                {% if product.stock_quantity %}
                                 <div class='p-3'>
                                     <h5 class="mb-2">Số lượng</h5>
                                     <div class="flex items-center">
@@ -131,13 +138,21 @@
                                         0₫
                                     </p>
                                 </div>
-                            
+                                {% else %}
+                                <div class="mb-4"></div>
+                                {%endif%}
                                 <!-- Nút bấm hành động -->
                                 <div class="d-grid gap-2 p-3" style="font-family: 'Inter', sans-serif;">
-                                    <button id="buyNow" class="bg-red-500 text-white py-2 px-4 rounded" type="button">Mua ngay</button>
-                                    <button id="addToCart" class="bg-blue-500 text-white py-2 px-4 rounded" type="button">Thêm vào giỏ hàng</button>
-                                    <button id="buyInstallments" class="bg-blue-500 text-white py-2 px-4 rounded" type="button">Mua trả góp</button>
+                                    {% if product.stock_quantity %}
+                                        <button id="buyNow" class="bg-red-500 text-white py-2 px-4 rounded" type="button">Mua ngay</button>
+                                        <button id="addToCart" class="bg-blue-500 text-white py-2 px-4 rounded" type="button">Thêm vào giỏ hàng</button>
+                                        <button id="buyInstallments" class="bg-blue-500 text-white py-2 px-4 rounded" type="button">Mua trả góp</button>
+                                    {% else %}
+                                        <button class="bg-red-500 text-white py-2 px-4 rounded" type="button" disabled>Hết hàng</button>
+                                        <button class="bg-blue-500 text-white py-2 px-4 rounded" type="button">Liên hệ khi có hàng</button>
+                                    {% endif %}
                                 </div>
+                                
                             </div>
                         </div>
                     </div>
