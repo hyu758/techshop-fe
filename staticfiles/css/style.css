@@ -3622,3 +3622,10 @@ section.categories .category-content a {
 #deleteAllButton:hover{
   color: rgb(255, 52, 52) !important;
 }
+
+/* RATING */
+.star-icon {
+  width: 15px;
+  height: 15px;
+  cursor: pointer;
+}

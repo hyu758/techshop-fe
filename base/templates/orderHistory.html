@@ -164,7 +164,9 @@
           text: 'Cảm ơn bạn đã đánh giá sản phẩm!',
           icon: 'success',
           confirmButtonText: 'Đóng'
-        });
+        }).then(()=>{
+          window.location.reload()
+        })
       } else {
         // Xử lý lỗi
         Swal.fire({

@@ -409,7 +409,6 @@ def checkout(request):
     
     # Nếu là GET request, hiển thị trang checkout với dữ liệu từ session
     selected_products = request.session.get('selected_products', [])
-    print(selected_products)
     context = {'products': selected_products}
     
     return render(request, 'checkout.html', context)
@@ -436,7 +435,6 @@ def createOrder(request):
                 'address': address
             }
 
-            print(api_data)
 
             # Gửi yêu cầu đến API bên ngoài
             api_url = 'https://techshop-backend-c7hy.onrender.com/api/orderItem'
@@ -447,7 +445,6 @@ def createOrder(request):
             if response.status_code == 200:
                 jsonData = response.json()    
                 paymentUrl = jsonData.get('paymentUrl')
-                print(paymentUrl)
                 return JsonResponse({'message': 'Order created successfully', 'paymentUrl': paymentUrl}, status=200)
             else:
                 # Nếu API trả về lỗi, truyền lỗi về cho frontend
@@ -464,13 +461,12 @@ def createOrder(request):
 def orderHistory(request):
     userId = request.session.get('user', {}).get('id')
     
-    api_url = f'http://localhost:3000/api/getOrderByUser/{userId}'
+    api_url = f'https://techshop-backend-c7hy.onrender.com/api/getOrderByUser/{userId}'
     
     try:
         response = requests.get(api_url)
         response.raise_for_status()  # Raise HTTPError for bad responses (4xx or 5xx)
         data = response.json()
-        print(data)
     except requests.exceptions.HTTPError as http_err:
         data = []
     except requests.exceptions.RequestException as req_err:
@@ -502,7 +498,7 @@ def rateProduct(request):
                 return JsonResponse({'error': 'Product ID and rating are required'}, status=400)
 
             # URL API với dữ liệu từ body
-            api_url = 'http://localhost:3000/api/rateProduct'
+            api_url = 'https://techshop-backend-c7hy.onrender.com/api/rateProduct'
             payload = {
                 'productId': product_id,
                 'rating': rating,
