@@ -1,13 +1,18 @@
 {% extends 'base.html' %}
-
+{%load static%}
 {% block title %}
   Register Page
 {% endblock %}
 
 {% block content %}
+<div class="absolute d-sm-none d-block" style="top:2%; left: 2%;">
+  <a href="javascript:history.back()">
+      <ion-icon name="arrow-back-outline"  size = "large"></ion-icon>
+  </a>
+</div>
   <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
     <div class="sm:mx-auto sm:w-full sm:max-w-sm">
-      <img class="mx-auto h-10 w-auto" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600" alt="Your Company" />
+      <img class="mx-auto h-10 w-auto" src="{% static 'image/logo-chan.png' %}" alt="Your Company" />
       <h2 class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">Sign up for your account</h2>
     </div>
 

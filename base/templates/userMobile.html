@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{%load static%}
+{%block title%} TechshopVN {%endblock%}
+{% block content %}
+
+<div>
+    
+
+    
+    <div class="bg-blue-500 d-flex justify-content-center align-items-center p-4 text-center" style="height: 158px;">
+        {% if request.session.user %}
+            <div class="">
+                {% if user.avatar_url %}
+                    <img src="{{ user.avatar_url }}" alt="avatar" class="rounded-circle img-fluid" style="width: 96px;" id="avatar-preview" />
+                {% else %}
+                    <img src="{%static 'image/avatar-default.jpg'%}" alt="avatar" class="rounded-circle img-fluid" style="width: 96px;" id="avatar-preview" />
+                {% endif %}
+                <div class=" text-center text-white fs-4">{{user.name}}</div>
+            </div>
+        {% else %}
+        <div class="bg-white text-primary p-3 rounded-1">
+            <a href="/login">Đăng nhập / Đăng ký</a>
+        </div>
+        {% endif %}
+    </div>
+    
+        {% if request.session.user %}
+            <a href="/profile">
+                <div class="border-bottom py-4 px-2 d-flex align-items-center gap-3">
+                    <ion-icon name="person-circle-outline" size="large"></ion-icon> Hồ sơ
+                </div>
+            </a>
+            <a href="/orderHistory">
+                <div class="border-bottom py-4 px-2 d-flex align-items-center gap-3">
+                    <ion-icon name="receipt-outline" size = "large"></ion-icon> Lịch sử đơn hàng
+                </div>
+            </a>
+        {% endif %}
+
+        <a href="https://www.facebook.com/nggiahii/" target="_blank">
+            <div class="border-bottom py-4 px-2 d-flex align-items-center gap-3">
+                <ion-icon name="call-outline" size = "large"></ion-icon> Chăm sóc khách hàng
+            </div>
+        </a>
+        <a href="https://github.com/hyu758" target="_blank">
+            <div class="border-bottom py-4 px-2 d-flex align-items-center gap-3">
+                <ion-icon name="briefcase-outline" size = "large"></ion-icon> Liên hệ hợp tác
+            </div>
+        </a>
+        {% if request.session.user %}
+        <a href="/logout">
+            <div class="border-bottom py-4 px-2 d-flex align-items-center gap-3">
+                <ion-icon name="log-out-outline" size = "large"></ion-icon> Đăng xuất
+            </div>
+        </a>
+        {% endif %}
+    <div>
+</div>
+{% include "partials/mobileNav.html" %}
+{% endblock %}

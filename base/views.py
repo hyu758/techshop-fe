@@ -127,12 +127,15 @@ def home(request):
     return render(request, 'home.html', context)
 
 def shop(request):
-    url = "https://techshop-backend-c7hy.onrender.com/api/getAllProducts"
-    response = requests.get(url)
-    brands_set = set()
+    products_url = "https://techshop-backend-c7hy.onrender.com/api/getAllProducts"
+    categories_url = "https://techshop-backend-c7hy.onrender.com/api/getAllCategoryNames"
+    products_response = requests.get(products_url)
+    categories_response = requests.get(categories_url)
     
-    if response.status_code == 200:
-        products = response.json()
+    brands_set = set()
+
+    if products_response.status_code == 200:
+        products = products_response.json()
     
         for product in products:
             product['price'] = format_currency(product['price'])
@@ -143,11 +146,19 @@ def shop(request):
         products = []
         brands = []
 
+    if categories_response.status_code == 200:
+        categories = categories_response.json()
+    else:
+        categories = []
+
     context = {
         'products': products,
-        'brands': brands
+        'brands': brands,
+        'categories': categories,
     }
+
     return render(request, 'shop.html', context)
+
 
 
 def product_detail(request, product_id):
@@ -465,7 +476,7 @@ def orderHistory(request):
     
     try:
         response = requests.get(api_url)
-        response.raise_for_status()  # Raise HTTPError for bad responses (4xx or 5xx)
+        response.raise_for_status()
         data = response.json()
     except requests.exceptions.HTTPError as http_err:
         data = []
@@ -494,8 +505,7 @@ def rateProduct(request):
                 return JsonResponse({'error': 'Product ID and rating are required'}, status=400)
 
             # URL API với dữ liệu từ body
-            # api_url = 'https://techshop-backend-c7hy.onrender.com/api/rateProduct'
-            api_url = 'http://127.0.0.1:3000/api/rateProduct'
+            api_url = 'https://techshop-backend-c7hy.onrender.com/api/rateProduct'
 
             payload = {
                 'productId': product_id,
@@ -518,3 +528,19 @@ def rateProduct(request):
             return JsonResponse({'error': 'Invalid JSON format'}, status=400)
     else:
         return JsonResponse({'error': 'Invalid request method'}, status=405)
+
+
+def user(request):
+    user_id = request.session.get('user', {}).get('id')
+    if not user_id:
+        return render(request, 'userMobile.html')
+
+    api_url = f'https://techshop-backend-c7hy.onrender.com/api/getUserById/{user_id}'
+    try:
+        response = requests.get(api_url)
+        response.raise_for_status()
+        user_data = response.json()
+        print(user_data)
+    except requests.exceptions.RequestException as req_err:
+        return JsonResponse({'error': f'Request error occurred: {req_err}'}, status=500)
+    return render(request, 'userMobile.html', {'user':user_data})

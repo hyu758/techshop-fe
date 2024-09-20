@@ -1,37 +1,45 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 {% load static %}
-{% block title %} Shopping page {% endblock %}
+{% block title %}
+  Shopping page
+{% endblock %}
 {% block content %}
-    {% include "partials/header.html" %}
-
-    <div>
+  {% include 'partials/header.html' %}
+  <div class="container d-sm-block d-none">
+    <div class="row pt-3">
+      <div class="col">
+        <nav aria-label="breadcrumb" class="rounded-3 p-3">
+          <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item">
+              <a href="/">Home</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">Shop</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <!-- main content -->
+  <section class="site-banner jarallax min-height300 padding-large overflow-visible" style="background: url({% static 'image/shoppage.webp' %}) no-repeat; background-position: top;">
     <div class="container">
-      <div class="row pt-3">
-        <div class="col">
-          <nav aria-label="breadcrumb" class="rounded-3 p-3">
-            <ol class="breadcrumb mb-0">
-              <li class="breadcrumb-item">
-                <a href="/">Home</a>
-              </li>
-              <li class="breadcrumb-item active" aria-current="page">Shop</li>
-            </ol>
-          </nav>
+      <div class="row">
+        <div class="col-md-12">
+          <h1 class="page-title">Shop page</h1>
         </div>
       </div>
     </div>
-    <!-- main content -->
-    <section class="site-banner jarallax min-height300 padding-large" style="background: url({%static 'image/shoppage.webp'%}) no-repeat; background-position: top;">
-      <div class="container">
-          <div class="row">
-            <div class="col-md-12">
-              <h1 class="page-title">Shop page</h1>
-            </div>
-          </div>
-        </div>
-      </section>
-    
-    {% include "components/allProducts.html" %}
-    {% include "partials/footer.html" %}
-    
+  </section>
+  {% include 'components/allProducts.html' %}
+  {% include "partials/mobileNav.html" %}
+  {% include 'partials/footer.html' %}
 
+  <style>
+    @media (max-width: 768px) {
+      * {
+        padding: 0px;
+        margin: 0px;
+        overflow-x: hidden;
+      }
+    }
+  </style>
 {% endblock %}

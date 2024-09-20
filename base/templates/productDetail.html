@@ -3,7 +3,12 @@
 {% block title %}Product Detail{% endblock %}
 {% block content %}
     {% include "partials/header.html" %}
-    <div class="container">
+    <div class="d-sm-none d-block" style="margin-top: 10%; margin-left: 4%;">
+        <a href="javascript:history.back()">
+            <ion-icon name="arrow-back-outline"  size = "large"></ion-icon>
+        </a>
+      </div>
+    <div class="container d-sm-block d-none">
         <div class="row pt-3">
           <div class="col">
             <nav aria-label="breadcrumb" class="rounded-3 p-3">
@@ -162,6 +167,7 @@
         </div>
     </div>
 
+    {% include "partials/mobileNav.html" %}
     {% include "partials/footer.html" %}
 
     <!-- JavaScript để hiển thị đánh giá (Rating) -->

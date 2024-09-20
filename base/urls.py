@@ -19,5 +19,6 @@ urlpatterns = [
     path('api/addToCart/', add_to_cart, name='add_to_cart'),
     path('api/updateCart/', updateCart, name="updateCart"),
     path('api/deleteFromCart', deleteFromCart, name = "deleteFromCart"),
-    path('api/deleteAllCart/', deleteAllCart, name = "deleteAllCart")
+    path('api/deleteAllCart/', deleteAllCart, name = "deleteAllCart"),
+    path('user/',user, name='userMobile')
 ]

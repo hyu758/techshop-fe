@@ -169,6 +169,7 @@ body {
   margin: 0;
 }
 
+
 body.no-scroll {
   overflow: hidden;
 }
@@ -1174,6 +1175,23 @@ img.image-circle {
   text-transform: capitalize;
   color: var(--dark-color);
 }
+.site-banner {
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.min-height300 {
+  min-height: 300px;
+}
+
+/* Responsive cho các thiết bị di động */
+@media (max-width: 768px) {
+  .site-banner {
+    min-height: 200px;
+  }
+}
+
 
 .breadcrumbs a:hover {
   color: var(--accent-color);
@@ -3619,7 +3637,7 @@ section.categories .category-content a {
   display: inline-block;
 }
 
-#deleteAllButton:hover{
+#deleteAllButton:hover {
   color: rgb(255, 52, 52) !important;
 }
 
@@ -3628,4 +3646,75 @@ section.categories .category-content a {
   width: 15px;
   height: 15px;
   cursor: pointer;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 576px) {
+  #billboard .carousel-inner img {
+    height: 200px;
+    object-fit: cover;
+  }
+}
+
+
+/* Định dạng thanh điều hướng ở dưới cùng */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  justify-content: space-around;
+  padding: 10px 0;
+  box-shadow: 0 -1px 10px rgba(0, 0, 0, 0.1);
+  z-index: 999;
+  left: 0px;
+  right: 0px;
+}
+
+/* Định dạng các mục trong thanh điều hướng */
+.bottom-nav .nav-item {
+  text-align: center;
+  flex-grow: 1;
+  color: #555;
+  text-decoration: none;
+  flex: 1;
+}
+
+/* Định dạng icon trong thanh điều hướng */
+.bottom-nav ion-icon {
+  font-size: 28px;
+  color: #555;
+}
+
+/* Hiệu ứng khi hover hoặc active */
+.bottom-nav .nav-item:hover ion-icon,
+.bottom-nav .nav-item:active ion-icon {
+  color: #007bff;
+}
+
+
+.filter-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+.close-button {
+  cursor: pointer;
+  float: right;
+  font-size: 20px;
 }

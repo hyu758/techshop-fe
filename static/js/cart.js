@@ -31,20 +31,20 @@ function renderCartItems() {
               <td style="width: 40%;">
                   <div class="d-flex align-items-center gap-4">
                         <img src="${item.image_url}" class="card-img-top border-2 w-50 mt-2 hidden sm:table-cell" alt="${item.name}" />
-                        <a href="/product/${item.id}" class="product-name">${item.name}</a>
+                        <a href="/product/${item.id}" class="product-name sm:text-base text-sm">${item.name}</a>
                   </div>
               </td>
               <td>
                   <div class="flex items-center">
-                      <button class="btn btn-outline-primary" onclick="decrement(${item.id})">-</button>
-                      <input type="number" class="form-control mx-2" value="${item.quantity}" onchange="handleChange(this.value, ${item.id})" style="width: 70px; text-align: center;" />
-                      <button class="btn btn-outline-primary" onclick="increment(${item.id})">+</button>
+                      <button class="btn btn-outline-primary d-sm-block d-none" onclick="decrement(${item.id})">-</button>
+                      <input type="number" class="form-control mx-2 sm:text-base text-sm" value="${item.quantity}" onchange="handleChange(this.value, ${item.id})" style="width: 70px; text-align: center;" />
+                      <button class="btn btn-outline-primary d-sm-block d-none" onclick="increment(${item.id})">+</button>
                   </div>
               </td>
-              <td class="fw-semibold">${formatCurrency(item.price)}₫</td>
-              <td class="hidden sm:table-cell fw-semibold">${formatCurrency(item.quantity * item.price)}₫</td>
+              <td class="fw-semibold sm:text-base text-sm">${formatCurrency(item.price)}₫</td>
+              <td class="d-sm-block d-none hidden sm:table-cell fw-semibold sm:text-base text-sm">${formatCurrency(item.quantity * item.price)}₫</td>
               <td>
-                  <button class="btn btn-outline-primary" onclick="removeFromCart(${item.id})">Xóa</button>
+                  <button class="btn btn-outline-primary sm:text-base text-sm" onclick="removeFromCart(${item.id})">Xóa</button>
               </td>
           </tr>
       `;

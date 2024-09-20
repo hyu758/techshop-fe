@@ -5,7 +5,12 @@
 {% endblock %}
 {% block content %}
   {% include 'partials/header.html' %}
-  <div style="background-color: #f8fafc;">
+  <div class="d-sm-none d-block" style="margin-top: 10%; margin-left: 4%;">
+    <a href="javascript:history.back()">
+        <ion-icon name="arrow-back-outline"  size = "large"></ion-icon>
+    </a>
+  </div>
+  <div style="background-color: #f8fafc;" class="mt-4">
     <div class="container py-4">
       {% for order in orders %}
         <div class="card mb-3">
@@ -14,10 +19,7 @@
               <div class="card-body">
                 <div class="card-text d-sm-flex d-block justify-content-between mb-4">
                   <div>
-                    <p>Mã đơn: {{order.order_id}}</p>
-                    <p>Tên người nhận: {{ order.customer_name }}</p>
-                    <p>Số điện thoại: {{ order.phone }}</p>
-                    <p>Địa chỉ nhận hàng: {{ order.address }}</p>
+                    <div class="d-sm-block d-none fs-4">Cảm ơn bạn đã mua hàng!, {{request.session.user.name}}</div>
                   </div>
                   <div class="text-end m-sm-0 mt-2">
                     Trạng thái:{% if order.status == 'delivered' %}
@@ -71,7 +73,20 @@
                     </div>
                   {% endfor %}
                 </div>
-                <div class="text-danger fs-5 text-end">Thành tiền: {{ order.total_amount }}₫</div>
+                <div class = "pt-2 mt-2 border-top fw-bold">Chi tiết hoá đơn</div>
+                  <div>
+                    <p>Mã hoá đơn: {{order.order_id}}</p>
+                    <p>Tên người nhận: {{ order.customer_name }}</p>
+                    <p>Số điện thoại: {{ order.phone }}</p>
+                    <p>Địa chỉ nhận hàng: {{ order.address }}</p>
+                  </div>
+                  <div>
+                    {% if order.status == 'delivered' %}
+                      <div class = "text-end">Phí giao hàng: <span class = "text-success">Miễn phí</span></div>
+                    {%endif%}
+
+                    <div class="text-danger fs-5 text-end">Thành tiền: {{ order.total_amount }}₫</div>
+                  </div>
               </div>
             </div>
           </div>
@@ -79,6 +94,8 @@
       {% endfor %}
     </div>
   </div>
+
+  {% include "partials/mobileNav.html" %}
   {% include 'partials/footer.html' %}
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script>

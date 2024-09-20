@@ -5,6 +5,11 @@
 {% endblock %}
 {% block content %}
   {% include 'partials/header.html' %}
+  <div class="absolute d-sm-none d-block" style="top:2%; left: 2%;">
+    <a href="javascript:history.back()">
+        <ion-icon name="arrow-back-outline"  size = "large"></ion-icon>
+    </a>
+</div>
   <div>
     <div class="container">
       <div class="row pt-3">
@@ -78,7 +83,7 @@
       </div>
     </div>
   </div>
-
+  {% include "partials/mobileNav.html" %}
   {% include 'partials/footer.html' %}
 
   {{ products|json_script:'products-data' }}

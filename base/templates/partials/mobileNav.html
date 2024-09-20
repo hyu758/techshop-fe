@@ -1,0 +1,17 @@
+<div class="bottom-nav bg-light d-sm-none d-flex">
+    <a href="/" class="nav-item">
+      <ion-icon name="home-outline"></ion-icon>
+    </a>
+    <a href="/shop" class="nav-item">
+      <ion-icon name="list-outline"></ion-icon>
+    </a>
+    {% if request.session.user %}
+    <a href="/cart" class="nav-item">
+      <ion-icon name="cart-outline"></ion-icon>
+    </a>
+    {% endif %}
+    <a href="/user" class="nav-item">
+      <ion-icon name="person-outline"></ion-icon>
+    </a>
+  </div>
+  
