@@ -30,7 +30,7 @@ function renderCartItems() {
               </td>
               <td style="width: 40%;">
                   <div class="d-flex align-items-center gap-4">
-                        <img src="${item.image_url}" class="card-img-top border-2 w-50 mt-2 hidden sm:table-cell" alt="${item.name}" />
+                        <img src="${item.image_url}" class="card-img-top border-2 w-50 mt-2 d-sm-block d-none sm:table-cell" alt="${item.name}" />
                         <a href="/product/${item.id}" class="product-name sm:text-base text-sm">${item.name}</a>
                   </div>
               </td>
