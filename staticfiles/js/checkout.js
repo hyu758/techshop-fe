@@ -27,10 +27,17 @@ document.addEventListener('DOMContentLoaded', function () {
   const getTotal = (cart) => {
     return cart.reduce((total, item) => total + item.quantity * item.price, 0)
   }
+
   const getProductIdsAndQuantities = (items) => {
     const productIds = items.map((item) => item.id)
     const quantities = items.map((item) => item.quantity)
     return { productIds, quantities }
+  }
+
+  // Hàm để kiểm tra số điện thoại có hợp lệ hay không
+  const validatePhoneNumber = (phone) => {
+    const phoneRegex = /^(0[3|5|7|8|9])+([0-9]{8})$/; // Regex cho số điện thoại Việt Nam
+    return phoneRegex.test(phone);
   }
 
   // Gửi yêu cầu POST đến API /createOrder
@@ -39,16 +46,19 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Lấy dữ liệu từ form
     const name = document.getElementById('name').value
-    const email = document.getElementById('email').value // không bắt buộc theo API của bạn, nhưng có thể cần cho frontend
+    const email = document.getElementById('email').value
     const address = document.getElementById('address').value
     const phone = document.getElementById('phone').value
-
-    // Lấy userId (giả định rằng userId được lưu trong localStorage hoặc session)
-    const userId = localStorage.getItem('userId') // Thay bằng cách lấy userId chính xác trong ứng dụng của bạn
 
     // Kiểm tra nếu không có sản phẩm trong giỏ hàng
     if (products.length === 0) {
       Swal.fire('Thông báo', 'Giỏ hàng trống. Vui lòng thêm sản phẩm để tiếp tục.', 'warning')
+      return
+    }
+
+    // Kiểm tra tính hợp lệ của số điện thoại
+    if (!validatePhoneNumber(phone)) {
+      Swal.fire('Lỗi', 'Số điện thoại không hợp lệ. Vui lòng nhập đúng số điện thoại.', 'error')
       return
     }
 
@@ -69,7 +79,7 @@ document.addEventListener('DOMContentLoaded', function () {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'X-CSRFToken': getCSRFToken() // Hàm để lấy CSRF token nếu dùng Django CSRF
+          'X-CSRFToken': getCSRFToken()
         },
         body: JSON.stringify(orderData)
       })

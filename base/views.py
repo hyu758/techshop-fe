@@ -1,11 +1,7 @@
 import requests
 import json
 from django.shortcuts import render, redirect
-from django.http import HttpResponseRedirect, JsonResponse
-from django.contrib import messages
-import random
-from django.views.decorators.csrf import csrf_exempt
-from .orderItemStatus import orderItemStatus
+from django.http import JsonResponse
 
 def format_currency(value):
     if isinstance(value, str):
@@ -181,6 +177,8 @@ def product_detail(request, product_id):
 
 
 def profile(request):
+    if (not request.session.get('user', {})):
+        return redirect('login')
     if request.method == 'POST':
         user_id = request.session.get('user', {}).get('id')
         if not user_id:
@@ -260,6 +258,8 @@ def upload_image(request):
 #CART
 
 def cart(request):
+    if (not request.session.get('user', {})):
+        return redirect('login')
     userId = request.session.get('user', {}).get('id')
 
     print("cart user:", userId)
@@ -404,6 +404,8 @@ def deleteAllCart(request):
 
 #CHECKOUT
 def checkout(request):
+    if (not request.session.get('user', {})):
+        return redirect('login')
     if request.method == 'POST':
         try:
             # Giải mã dữ liệu JSON từ request body
@@ -470,6 +472,8 @@ def createOrder(request):
 
 
 def orderHistory(request):
+    if (not request.session.get('user', {})):
+        return redirect('login')
     userId = request.session.get('user', {}).get('id')
     
     api_url = f'https://techshop-backend-c7hy.onrender.com/api/getOrderByUser/{userId}'

@@ -3,7 +3,7 @@
 {% block title %} Login page {% endblock %}
 
 {% block content %}
-<div class="absolute d-sm-none d-block" style="top:2%; left: 2%;">
+<div class="absolute" style="top:2%; left: 2%;">
     <a href="javascript:history.back()">
         <ion-icon name="arrow-back-outline"  size = "large"></ion-icon>
     </a>
@@ -48,49 +48,5 @@
     </div>
 </div>
 
-<script>
-    document.getElementById('loginForm').addEventListener('submit', async function (event) {
-        event.preventDefault();
-    
-        const formData = new FormData(this);
-        const data = Object.fromEntries(formData.entries());
-    
-    
-        try {
-            const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-            const response = await fetch(this.action, {
-                method: 'POST',
-                body: JSON.stringify(data),
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': csrfToken // Đảm bảo CSRF token chính xác
-                }
-            });
-    
-            const result = await response.json();
-            if (response.ok) {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Đăng nhập thành công!',
-                    text: 'Bạn sẽ được chuyển đến trang chủ.'
-                }).then(() => {
-                    window.location.href = '/';
-                });
-            } else {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Đăng nhập thất bại!',
-                    text: result.error || 'Email hoặc mật khẩu không chính xác.'
-                });
-            }
-        } catch (error) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Lỗi kết nối!',
-                text: 'Không thể kết nối tới server.'
-            });
-        }
-    });
-    
-</script>
+<script src="{% static "js/login.js" %}"></script>
 {% endblock %}
