@@ -26,6 +26,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const tabs = document.querySelectorAll('.tabs .tab');
     const sortSelect = document.getElementById('sort-select');
     const sortOptions = sortSelect.querySelectorAll('option');
+    const sortSelectMb = document.getElementById('sort-select-mb');
+    const sortOptionsMb = sortSelect.querySelectorAll('option');
 
     let products = JSON.parse(document.getElementById('products-data').textContent);
     let currentPage = 1;
@@ -348,6 +350,17 @@ document.addEventListener('DOMContentLoaded', function () {
         currentSortOrder = selectedValue;
         sortOptions.forEach(opt => opt.classList.remove('active'));
         const activeOption = Array.from(sortOptions).find(opt => opt.value === selectedValue);
+        if (activeOption) {
+            activeOption.classList.add('active');
+        }
+        applyFilters();
+    });
+
+    sortSelectMb.addEventListener('change', function (e) {
+        const selectedValue = this.value;
+        currentSortOrder = selectedValue;
+        sortOptionsMb.forEach(opt => opt.classList.remove('active'));
+        const activeOption = Array.from(sortOptionsMb).find(opt => opt.value === selectedValue);
         if (activeOption) {
             activeOption.classList.add('active');
         }
