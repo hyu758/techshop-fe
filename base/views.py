@@ -548,3 +548,44 @@ def user(request):
     except requests.exceptions.RequestException as req_err:
         return JsonResponse({'error': f'Request error occurred: {req_err}'}, status=500)
     return render(request, 'userMobile.html', {'user':user_data})
+
+
+def changePassword(request):
+    if request.method == 'PUT':
+        print('doi mk')
+        try:
+            data = json.loads(request.body)
+            current_password = data.get('old_password')
+            new_password = data.get('new_password')
+            email = request.session['user']['email']  # Lấy email từ session
+            print(current_password, email)
+            # Kiểm tra mật khẩu cũ thông qua API
+            login_api_url = 'https://techshop-backend-c7hy.onrender.com/api/login'  # Đảm bảo URL chính xác
+            login_response = requests.post(login_api_url, json={
+                'email': email,
+                'password': current_password
+            })
+
+            if login_response.status_code != 200:
+                return JsonResponse({'error': 'Mật khẩu cũ không chính xác.'}, status=400)
+
+            # Gửi yêu cầu đến API để thay đổi mật khẩu
+            change_password_api_url = 'https://techshop-backend-c7hy.onrender.com/api/changeUserPwd'  # Đảm bảo URL chính xác
+            response = requests.put(change_password_api_url, json={
+                'email': email,
+                'currentPassword': current_password,
+                'newPassword': new_password
+            })
+
+            if response.status_code == 200:
+                return JsonResponse({'message': 'Mật khẩu đã được cập nhật thành công.'})
+            else:
+                error_data = response.json()
+                return JsonResponse({'error': error_data.get('error', 'Đã xảy ra lỗi.')}, status=response.status_code)
+
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'Invalid JSON'}, status=400)
+
+    # Nếu là phương thức GET, hiển thị trang đổi mật khẩu
+    return render(request, 'changePassword.html')
+

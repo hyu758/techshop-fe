@@ -334,8 +334,6 @@ document.addEventListener('DOMContentLoaded', function () {
         currentCategoryId = '0';
         currentPage = 1;
 
-        console.log("ngu")
-
         applyFilters();
     }
 
